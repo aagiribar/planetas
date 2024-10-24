@@ -17,18 +17,19 @@ function init() {
     0.1,
     1000
   );
-  camara.position.set(0, 0, 10);
+  camara.position.set(0, 0, 70);
 
   renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
 
   let camcontrols = new OrbitControls(camara, renderer.domElement);
+  camcontrols
 
   const tx_sol = new THREE.TextureLoader().load(
     "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/sunmap.jpg?v=1729784770619"
   );
-  Estrella(2, tx_sol);
+  Estrella(10, tx_sol);
   
   const tx_merc = new THREE.TextureLoader().load(
     "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/mercurymap.jpg?v=1729792016170"
@@ -38,7 +39,16 @@ function init() {
     "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/mercurybump.jpg?v=1729792012229"
   );
   
-  Planeta(3, 0, 0, 0.07, 0xffffff, 1, 1, 1, "Mercurio", tx_merc, bump_merc);
+  const tx_venus = new THREE.TextureLoader().load(
+    "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/venusmap.jpg?v=1729793328630"
+  );
+  
+  const bump_venus = new THREE.TextureLoader().load(
+    "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/venusbump.jpg?v=1729793324059"
+  );
+  
+  Planeta(15, 0, 0, 0.24, 0xffffff, 1, 1, 1, "Mercurio", tx_merc, bump_merc);
+  Planeta(30, 0, 0, 0.60, 0xffffff, 1, 1, 1, "Venus", tx_venus, bump_venus);
   
   luz = new THREE.PointLight();
   luz.position.set(0,0,0);
