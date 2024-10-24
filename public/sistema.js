@@ -5,8 +5,9 @@ let escena, renderer, camara;
 let estrella;
 let objetos = [];
 let luz;
-let foco_camara = estrella;
+let foco_camara;
 let raycaster;
+let camcontrols;
 
 init();
 animationLoop();
@@ -25,12 +26,13 @@ function init() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
 
-  let camcontrols = new OrbitControls(camara, renderer.domElement);
+  camcontrols = new OrbitControls(camara, renderer.domElement);
 
   const tx_sol = new THREE.TextureLoader().load(
     "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/sunmap.jpg?v=1729784770619"
   );
   Estrella(10, tx_sol);
+  foco_camara = estrella;
   
   const tx_merc = new THREE.TextureLoader().load(
     "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/mercurymap.jpg?v=1729792016170"
@@ -131,15 +133,17 @@ function onDocumentMouseDown(event) {
     //Intersección, define rayo
     raycaster.setFromCamera(mouse, camara);
     
-    for(let objeto of objetos) {
-      const intersecciones = raycaster.intersectObject(objeto);
-      console.log(intersecciones[0]);
-    }
+    const intersecciones = raycaster.intersectObjects(objetos);
+    foco_camara = intersecciones[0].object;
+    camcontrols.update();
   }
 }
 
 function animationLoop() {
   requestAnimationFrame(animationLoop);
   estrella.rotation.y += 0.01;
+  camcontrols.target.x = foco_camara.position.x;
+  camcontrols.target.y = foco_camara.position.y;
+  camcontrols.target.z = foco_camara.position.z;
   renderer.render(escena, camara);
 }
