@@ -80,7 +80,7 @@ function init() {
   );
   
   const tx_jupiter = new THREE.TextureLoader().load(
-    "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/marsbump1k.jpg?v=1729797885488"
+    "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/jupitermap.jpg?v=1729798212997"
   );
   
   Planeta(15, 0, 0, 0.24, 0xffffff, 1, 1, 1, "Mercurio", tx_merc, bump_merc);
@@ -88,6 +88,7 @@ function init() {
   Planeta(35, 0, 0, 0.38, 0xffffff, 1, 1, 1, "Tierra", tx_tierra, bump_tierra, spec_tierra);
   Planeta(35, 0, 0, 0.39, 0xffffff, 1, 1, 1, undefined, nubes_tierra, undefined, undefined, trans_nubes);
   Planeta(45, 0, 0, 0.34, 0xffffff, 1, 1, 1, "Marte", tx_marte, bump_marte);
+  Planeta(70, 0, 0, 7.77, 0xffffff, 1, 1, 1, "Jupiter", tx_jupiter);
   
   luz = new THREE.PointLight();
   luz.position.set(0,0,0);
