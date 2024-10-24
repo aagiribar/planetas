@@ -24,7 +24,7 @@ function init() {
 }
 
 function Estrella(radio, textura = undefined) {
-    let geometria = new THREE.SphereGeometry(radio, 10, 10);
+    let geometria = new THREE.SphereGeometry(radio, 30, 30);
     let material = new THREE.MeshBasicMaterial({color: 0xffff00});
   
     if (textura != undefined) { 
@@ -37,5 +37,6 @@ function Estrella(radio, textura = undefined) {
 
 function animationLoop() {
   requestAnimationFrame(animationLoop);
+  estrella.rotation.y += 0.01;
   renderer.render(escena, camara);
 }
