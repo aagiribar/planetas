@@ -8,6 +8,7 @@ let luz;
 let foco_camara;
 let raycaster;
 let camcontrols;
+let nubes;
 
 init();
 animationLoop();
@@ -58,9 +59,20 @@ function init() {
     "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/earthbump1k.jpg?v=1729791456765"
   );
   
+  const spec_tierra = new THREE.TextureLoader().load(
+    "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/earthspec1k.jpg?v=1729791473219"
+  );
+  
+  const nubes_tierra = new THREE.TextureLoader().load(
+    "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/earthcloudmap.jpg?v=1729791481235"
+  );
+  
+  const trans_nubes = new THREE.TextureLoader
+  
   Planeta(15, 0, 0, 0.24, 0xffffff, 1, 1, 1, "Mercurio", tx_merc, bump_merc);
   Planeta(30, 0, 0, 0.60, 0xffffff, 1, 1, 1, "Venus", tx_venus, bump_venus);
-  Planeta(45, 0, 0, 0.38, 0xffffff, 1, 1, 1, "Tierra", tx_tierra, bump_tierra);
+  Planeta(45, 0, 0, 0.38, 0xffffff, 1, 1, 1, "Tierra", tx_tierra, bump_tierra, spec_tierra);
+  Planeta(45, 0, 0, 0.48, 0xffffff, 1, 1, 1, undefined, nubes_tierra);
   
   luz = new THREE.PointLight();
   luz.position.set(0,0,0);
@@ -129,7 +141,12 @@ function Planeta(x, y, z, radio, color, vel, f1, f2, nombre, textura = undefined
   planeta.position.set(x, y, z);
   planeta.userData.nombre = nombre;
   escena.add(planeta);
-  objetos.push(planeta);
+  if (nombre != undefined) {
+    objetos.push(planeta);
+  }
+  else {
+    nubes = planeta;
+  }
 }
 
 function onDocumentMouseDown(event) {
