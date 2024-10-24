@@ -4,6 +4,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 let escena, renderer, camara;
 let estrella;
 let objetos = [];
+let luz;
 
 init();
 animationLoop();
@@ -29,6 +30,19 @@ function init() {
   );
   Estrella(2, tx_sol);
   
+  const tx_merc = new THREE.TextureLoader().load(
+    "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/mercurymap.jpg?v=1729792016170"
+  );
+  
+  const bump_merc = new THREE.TextureLoader().load(
+    "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/mercurybump.jpg?v=1729792012229"
+  );
+  
+  Planeta(3, 0, 0, 0.07, 0xffffff, 1, 1, 1, "Mercurio", tx_merc, bump_merc);
+  
+  luz = new THREE.PointLight();
+  luz.position.set(0,0,0);
+  escena.add(luz);
   
 }
 
@@ -45,7 +59,7 @@ function Estrella(radio, textura = undefined) {
   escena.add(estrella);
 }
 
-function Planeta(x, y, z, radio, color, vel, f1, f2, textura = undefined, texbump = undefined, texspec = undefined, texalpha = undefined, sombra = false) {
+function Planeta(x, y, z, radio, color, vel, f1, f2, name, textura = undefined, texbump = undefined, texspec = undefined, texalpha = undefined, sombra = false) {
   let geometry = new THREE.SphereBufferGeometry(radio, 30, 30);
   //Material Phong definiendo color
   let material = new THREE.MeshPhongMaterial({
