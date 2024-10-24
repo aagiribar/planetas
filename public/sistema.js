@@ -5,6 +5,8 @@ let escena, renderer, camara;
 let estrella;
 let objetos = [];
 let luz;
+let foco_camara = estrella;
+let raycaster;
 
 init();
 animationLoop();
@@ -24,7 +26,6 @@ function init() {
   document.body.appendChild(renderer.domElement);
 
   let camcontrols = new OrbitControls(camara, renderer.domElement);
-  camcontrols
 
   const tx_sol = new THREE.TextureLoader().load(
     "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/sunmap.jpg?v=1729784770619"
@@ -54,6 +55,9 @@ function init() {
   luz.position.set(0,0,0);
   escena.add(luz);
   
+  raycaster = new THREE.Raycaster();
+  document.addEventListener("mousedown", onDocumentMouseDown);
+  
 }
 
 function Estrella(radio, textura = undefined) {
@@ -69,7 +73,7 @@ function Estrella(radio, textura = undefined) {
   escena.add(estrella);
 }
 
-function Planeta(x, y, z, radio, color, vel, f1, f2, name, textura = undefined, texbump = undefined, texspec = undefined, texalpha = undefined, sombra = false) {
+function Planeta(x, y, z, radio, color, vel, f1, f2, nombre, textura = undefined, texbump = undefined, texspec = undefined, texalpha = undefined, sombra = false) {
   let geometry = new THREE.SphereBufferGeometry(radio, 30, 30);
   //Material Phong definiendo color
   let material = new THREE.MeshPhongMaterial({
@@ -111,8 +115,30 @@ function Planeta(x, y, z, radio, color, vel, f1, f2, name, textura = undefined, 
   let planeta = new THREE.Mesh(geometry, material);
   if (sombra) planeta.castShadow = true;
   planeta.position.set(x, y, z);
+  planeta.userData
   escena.add(planeta);
   objetos.push(planeta);
+}
+
+function onDocumentMouseDown(event) {
+  if (event.buttons == 2) {
+    const mouse = {
+    x: (event.clientX / renderer.domElement.clientWidth) * 2 - 1,
+    y: -(event.clientY / renderer.domElement.clientHeight) * 2 + 1,
+    };
+
+    //Intersección, define rayo
+    raycaster.setFromCamera(mouse, camara);
+    
+    for(let objeto of objetos) {
+      console.log(objeto.userData.nombre);
+      const intersecciones = raycaster.intersectObject(objeto);
+      if (intersecciones.lenght > 0) {
+        console.log(objeto);
+        break;
+      }
+    }
+  }
 }
 
 function animationLoop() {
