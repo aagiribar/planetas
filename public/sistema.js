@@ -50,8 +50,17 @@ function init() {
     "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/venusbump.jpg?v=1729793324059"
   );
   
+  const tx_tierra = new THREE.TextureLoader().load(
+    "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/earthmap1k.jpg?v=1729791486243"
+  );
+  
+  const bump_tierra = new THREE.TextureLoader().load(
+    "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/earthbump1k.jpg?v=1729791456765"
+  );
+  
   Planeta(15, 0, 0, 0.24, 0xffffff, 1, 1, 1, "Mercurio", tx_merc, bump_merc);
   Planeta(30, 0, 0, 0.60, 0xffffff, 1, 1, 1, "Venus", tx_venus, bump_venus);
+  Planeta(45, 0, 0, 0.38, 0xffffff, 1, 1, 1, "Tierra", tx_tierra, bump_tierra);
   
   luz = new THREE.PointLight();
   luz.position.set(0,0,0);
@@ -134,8 +143,9 @@ function onDocumentMouseDown(event) {
     raycaster.setFromCamera(mouse, camara);
     
     const intersecciones = raycaster.intersectObjects(objetos);
-    foco_camara = intersecciones[0].object;
-    camcontrols.update();
+    if (intersecciones.length > 0) {
+      foco_camara = intersecciones[0].object;
+    }
   }
 }
 
