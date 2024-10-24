@@ -67,12 +67,14 @@ function init() {
     "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/earthcloudmap.jpg?v=1729791481235"
   );
   
-  const trans_nubes = new THREE.TextureLoader
+  const trans_nubes = new THREE.TextureLoader().load(
+    "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/earthcloudmaptrans_invert.jpg?v=1729796983169"
+  );
   
   Planeta(15, 0, 0, 0.24, 0xffffff, 1, 1, 1, "Mercurio", tx_merc, bump_merc);
-  Planeta(30, 0, 0, 0.60, 0xffffff, 1, 1, 1, "Venus", tx_venus, bump_venus);
-  Planeta(45, 0, 0, 0.38, 0xffffff, 1, 1, 1, "Tierra", tx_tierra, bump_tierra, spec_tierra);
-  Planeta(45, 0, 0, 0.48, 0xffffff, 1, 1, 1, undefined, nubes_tierra);
+  Planeta(25, 0, 0, 0.60, 0xffffff, 1, 1, 1, "Venus", tx_venus, bump_venus);
+  Planeta(35, 0, 0, 0.38, 0xffffff, 1, 1, 1, "Tierra", tx_tierra, bump_tierra, spec_tierra);
+  Planeta(35, 0, 0, 0.39, 0xffffff, 1, 1, 1, undefined, nubes_tierra, undefined, undefined, trans_nubes);
   
   luz = new THREE.PointLight();
   luz.position.set(0,0,0);
