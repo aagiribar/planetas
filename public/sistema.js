@@ -70,6 +70,7 @@ function Estrella(radio, textura = undefined) {
 
   estrella = new THREE.Mesh(geometria, material);
   estrella.userData.nombre = "Sol";
+  objetos.push(estrella);
   escena.add(estrella);
 }
 
@@ -115,7 +116,7 @@ function Planeta(x, y, z, radio, color, vel, f1, f2, nombre, textura = undefined
   let planeta = new THREE.Mesh(geometry, material);
   if (sombra) planeta.castShadow = true;
   planeta.position.set(x, y, z);
-  planeta.userData
+  planeta.userData.nombre = nombre;
   escena.add(planeta);
   objetos.push(planeta);
 }
@@ -131,12 +132,8 @@ function onDocumentMouseDown(event) {
     raycaster.setFromCamera(mouse, camara);
     
     for(let objeto of objetos) {
-      console.log(objeto.userData.nombre);
       const intersecciones = raycaster.intersectObject(objeto);
-      if (intersecciones.lenght > 0) {
-        console.log(objeto);
-        break;
-      }
+      console.log(intersecciones[0]);
     }
   }
 }
