@@ -71,10 +71,23 @@ function init() {
     "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/earthcloudmaptrans_invert.jpg?v=1729796983169"
   );
   
+  const tx_marte = new THREE.TextureLoader().load(
+    "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/mars_1k_color.jpg?v=1729797844213"
+  );
+  
+  const bump_marte = new THREE.TextureLoader().load(
+    "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/marsbump1k.jpg?v=1729797885488"
+  );
+  
+  const tx_jupiter = new THREE.TextureLoader().load(
+    "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/marsbump1k.jpg?v=1729797885488"
+  );
+  
   Planeta(15, 0, 0, 0.24, 0xffffff, 1, 1, 1, "Mercurio", tx_merc, bump_merc);
   Planeta(25, 0, 0, 0.60, 0xffffff, 1, 1, 1, "Venus", tx_venus, bump_venus);
   Planeta(35, 0, 0, 0.38, 0xffffff, 1, 1, 1, "Tierra", tx_tierra, bump_tierra, spec_tierra);
   Planeta(35, 0, 0, 0.39, 0xffffff, 1, 1, 1, undefined, nubes_tierra, undefined, undefined, trans_nubes);
+  Planeta(45, 0, 0, 0.34, 0xffffff, 1, 1, 1, "Marte", tx_marte, bump_marte);
   
   luz = new THREE.PointLight();
   luz.position.set(0,0,0);
