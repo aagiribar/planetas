@@ -12,6 +12,7 @@ let camcontrols;
 let nubes;
 let elementosUI;
 let selectorCamara;
+let selectorRotacion;
 
 const gui = new GUI();
 
@@ -33,6 +34,7 @@ function init() {
   document.body.appendChild(renderer.domElement);
 
   camcontrols = new OrbitControls(camara, renderer.domElement);
+  camcontrols.autoRotate = true;
 
   const tx_sol = new THREE.TextureLoader().load(
     "sunmap.jpg"
@@ -103,14 +105,20 @@ function init() {
   document.addEventListener("mousedown", onDocumentMouseDown);
   
   const carpetaCamara = gui.addFolder("Cámara");
-  elementosUI = {"Objeto seleccionado": "Sol"};
+  elementosUI = {
+    "Objeto seleccionado": "Sol",
+    "Rotación automática": true
+  };
   selectorCamara = carpetaCamara.add(elementosUI, "Objeto seleccionado", obtenerNombresObjetos());
   selectorCamara.onChange(function (valor) {
     foco_camara = objetos.find((objeto) => {
       return objeto.userData.nombre === valor;
     });
+  });
+  selectorRotacion = carpetaCamara.add(elementosUI, "Rotación automática");
+  selectorRotacion.onChange(function (valor) {
+    camcontrols.autoRotate = valor;
   })
-  
 }
 
 function Estrella(radio, textura = undefined) {
@@ -211,5 +219,6 @@ function animationLoop() {
   camcontrols.target.x = foco_camara.position.x;
   camcontrols.target.y = foco_camara.position.y;
   camcontrols.target.z = foco_camara.position.z;
+  camcontrols.update();
   renderer.render(escena, camara);
 }
