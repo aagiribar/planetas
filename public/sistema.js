@@ -30,57 +30,57 @@ function init() {
   camcontrols = new OrbitControls(camara, renderer.domElement);
 
   const tx_sol = new THREE.TextureLoader().load(
-    "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/sunmap.jpg?v=1729784770619"
+    "sunmap.jpg"
   );
   Estrella(10, tx_sol);
   foco_camara = estrella;
   
   const tx_merc = new THREE.TextureLoader().load(
-    "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/mercurymap.jpg?v=1729792016170"
+    "mercurymap.jpg"
   );
   
   const bump_merc = new THREE.TextureLoader().load(
-    "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/mercurybump.jpg?v=1729792012229"
+    "mercurybump.jpg"
   );
   
   const tx_venus = new THREE.TextureLoader().load(
-    "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/venusmap.jpg?v=1729793328630"
+    "venusmap.jpg"
   );
   
   const bump_venus = new THREE.TextureLoader().load(
-    "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/venusbump.jpg?v=1729793324059"
+    "venusbump.jpg"
   );
   
   const tx_tierra = new THREE.TextureLoader().load(
-    "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/earthmap1k.jpg?v=1729791486243"
+    "earthmap1k.jpg"
   );
   
   const bump_tierra = new THREE.TextureLoader().load(
-    "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/earthbump1k.jpg?v=1729791456765"
+    "earthbump1k.jpg"
   );
   
   const spec_tierra = new THREE.TextureLoader().load(
-    "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/earthspec1k.jpg?v=1729791473219"
+    "earthspec1k.jpg"
   );
   
   const nubes_tierra = new THREE.TextureLoader().load(
-    "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/earthcloudmap.jpg?v=1729791481235"
+    "earthcloudmap.jpg"
   );
   
   const trans_nubes = new THREE.TextureLoader().load(
-    "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/earthcloudmaptrans_invert.jpg?v=1729796983169"
+    "earthcloudmaptrans.jpg"
   );
   
   const tx_marte = new THREE.TextureLoader().load(
-    "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/mars_1k_color.jpg?v=1729797844213"
+    "mars_1k_color.jpg"
   );
   
   const bump_marte = new THREE.TextureLoader().load(
-    "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/marsbump1k.jpg?v=1729797885488"
+    "marsbump1k.jpg"
   );
   
   const tx_jupiter = new THREE.TextureLoader().load(
-    "https://cdn.glitch.global/4591fef6-cf3a-4142-af6c-7c82ef7b6add/jupitermap.jpg?v=1729798212997"
+    "jupitermap.jpg"
   );
   
   Planeta(15, 0, 0, 0.24, 0xffffff, 1, 1, 1, "Mercurio", tx_merc, bump_merc);
