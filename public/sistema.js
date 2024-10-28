@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js'
 
 let escena, renderer, camara;
 let estrella;
@@ -9,6 +10,10 @@ let foco_camara;
 let raycaster;
 let camcontrols;
 let nubes;
+let elementosUI;
+let selectorCamara;
+
+const gui = new GUI();
 
 init();
 animationLoop();
@@ -68,7 +73,7 @@ function init() {
   );
   
   const trans_nubes = new THREE.TextureLoader().load(
-    "earthcloudmaptrans.jpg"
+    "earthcloudmaptrans_invert.jpg"
   );
   
   const tx_marte = new THREE.TextureLoader().load(
@@ -96,6 +101,15 @@ function init() {
   
   raycaster = new THREE.Raycaster();
   document.addEventListener("mousedown", onDocumentMouseDown);
+  
+  const carpetaCamara = gui.addFolder("Cámara");
+  elementosUI = {"Objeto seleccionado": "Sol"};
+  selectorCamara = carpetaCamara.add(elementosUI, "Objeto seleccionado", obtenerNombresObjetos());
+  selectorCamara.onChange(function (valor) {
+    foco_camara = objetos.find((objeto) => {
+      return objeto.userData.nombre === valor;
+    });
+  })
   
 }
 
@@ -165,6 +179,14 @@ function Planeta(x, y, z, radio, color, vel, f1, f2, nombre, textura = undefined
   }
 }
 
+function obtenerNombresObjetos() {
+  let nombres = []
+  for (const objeto of objetos) {
+    nombres.push(objeto.userData.nombre)
+  }
+  return nombres;
+}
+
 function onDocumentMouseDown(event) {
   if (event.buttons == 2) {
     const mouse = {
@@ -178,6 +200,7 @@ function onDocumentMouseDown(event) {
     const intersecciones = raycaster.intersectObjects(objetos);
     if (intersecciones.length > 0) {
       foco_camara = intersecciones[0].object;
+      selectorCamara.setValue(foco_camara.userData.nombre);
     }
   }
 }
