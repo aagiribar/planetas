@@ -5,6 +5,7 @@ import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js'
 let escena, renderer, camara;
 let estrella;
 let objetos = [];
+let anillos = [];
 let luz;
 let foco_camara;
 let raycaster;
@@ -89,6 +90,18 @@ function init() {
   const tx_jupiter = new THREE.TextureLoader().load(
     "jupitermap.jpg"
   );
+
+  const tx_saturno = new THREE.TextureLoader().load(
+    "saturnmap.jpg"
+  )
+
+  const tx_anillo_sat = new THREE.TextureLoader().load(
+    "saturnringcolor.jpg"
+  )
+
+  const trans_anillo_sat = new THREE.TextureLoader().load(
+    "saturnringpattern.gif"
+  )
   
   Planeta(15, 0, 0, 0.24, 0xffffff, 1, 1, 1, "Mercurio", tx_merc, bump_merc);
   Planeta(25, 0, 0, 0.60, 0xffffff, 1, 1, 1, "Venus", tx_venus, bump_venus);
@@ -96,6 +109,10 @@ function init() {
   Planeta(35, 0, 0, 0.39, 0xffffff, 1, 1, 1, undefined, nubes_tierra, undefined, undefined, trans_nubes);
   Planeta(45, 0, 0, 0.34, 0xffffff, 1, 1, 1, "Marte", tx_marte, bump_marte);
   Planeta(70, 0, 0, 7.77, 0xffffff, 1, 1, 1, "Jupiter", tx_jupiter);
+  Planeta(100, 0, 0, 5.85, 0xffffff, 1, 1, 1, "Saturno", tx_saturno);
+  Anillo(objetos[6].position.x, objetos[6].position.y, objetos[6].position.z, objetos[6], 7, 10, 0xdaca8f, tx_anillo_sat, trans_anillo_sat);
+  anillos[0].rotation.x = 1.0472;
+  anillos[0].rotation.y = 0.7853;
   
   luz = new THREE.PointLight();
   luz.position.set(0,0,0);
@@ -185,6 +202,40 @@ function Planeta(x, y, z, radio, color, vel, f1, f2, nombre, textura = undefined
   else {
     nubes = planeta;
   }
+}
+
+function Anillo(x, y, z, planeta, radioInterno, radioExterno, color, textura = undefined, texalpha = undefined, sombra = false) {
+  let geometria = new THREE.RingGeometry(radioInterno, radioExterno);
+  let material = new THREE.MeshPhongMaterial({
+    color: color,
+    side: THREE.DoubleSide
+  });
+
+  if (textura != undefined){
+    material.map = textura;
+  }
+
+  if (texalpha != undefined){
+    //Con mapa de transparencia
+    material.alphaMap = texalpha;
+    material.transparent = true;
+    material.side = THREE.DoubleSide;
+    material.opacity = 1.0;
+
+    //Sin mapa de transparencia
+    /*material.transparent = true;
+    material.side = THREE.DoubleSide;
+    material.opacity = 0.8;
+    material.transparent = true;
+    material.depthWrite = false;*/
+  }
+
+  let anillo = new THREE.Mesh(geometria, material);
+  if (sombra) anillo.castShadow = true;
+  anillo.position.set(x, y, z);
+  escena.add(anillo);
+  anillos.push(anillo);
+  planeta.userData.anillo = anillo;
 }
 
 function obtenerNombresObjetos() {
