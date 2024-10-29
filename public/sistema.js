@@ -14,6 +14,8 @@ let nubes;
 let elementosUI;
 let selectorCamara;
 let selectorRotacion;
+let carpetaRotacion;
+let rotacionAnilloX, rotacionAnilloY, rotacionAnilloZ;
 
 const gui = new GUI();
 
@@ -111,9 +113,7 @@ function init() {
   Planeta(70, 0, 0, 7.77, 0xffffff, 1, 1, 1, "Jupiter", tx_jupiter);
   Planeta(100, 0, 0, 5.85, 0xffffff, 1, 1, 1, "Saturno", tx_saturno);
   Anillo(objetos[6].position.x, objetos[6].position.y, objetos[6].position.z, objetos[6], 7, 10, 0xdaca8f, tx_anillo_sat, trans_anillo_sat);
-  anillos[0].rotation.x = 1.0472;
-  anillos[0].rotation.y = 0.7853;
-  
+
   luz = new THREE.PointLight();
   luz.position.set(0,0,0);
   escena.add(luz);
@@ -124,7 +124,10 @@ function init() {
   const carpetaCamara = gui.addFolder("Cámara");
   elementosUI = {
     "Objeto seleccionado": "Sol",
-    "Rotación automática": true
+    "Rotación automática": true,
+    "Rotación en X": Math.PI / 2,
+    "Rotación en Y": Math.PI / 4,
+    "Rotación en Z": 0
   };
   selectorCamara = carpetaCamara.add(elementosUI, "Objeto seleccionado", obtenerNombresObjetos());
   selectorCamara.onChange(function (valor) {
@@ -135,7 +138,24 @@ function init() {
   selectorRotacion = carpetaCamara.add(elementosUI, "Rotación automática");
   selectorRotacion.onChange(function (valor) {
     camcontrols.autoRotate = valor;
-  })
+  });
+  let carpetaPlaneta = gui.addFolder("Planeta");
+  carpetaRotacion = carpetaPlaneta.addFolder("Rotación del anillo");
+  rotacionAnilloX = carpetaRotacion.add(elementosUI, "Rotación en X", 0, Math.PI * 2, 0.01);
+  rotacionAnilloY = carpetaRotacion.add(elementosUI, "Rotación en Y", 0, Math.PI * 2, 0.01);
+  rotacionAnilloZ = carpetaRotacion.add(elementosUI, "Rotación en Z", 0, Math.PI * 2, 0.01);
+
+  rotacionAnilloX.onChange(function (valor) {
+    foco_camara.userData.anillo.rotation.x = valor;
+  });
+
+  rotacionAnilloY.onChange(function (valor) {
+    foco_camara.userData.anillo.rotation.y = valor;
+  });
+
+  rotacionAnilloZ.onChange(function (valor) {
+    foco_camara.userData.anillo.rotation.z = valor;
+  });
 }
 
 function Estrella(radio, textura = undefined) {
@@ -271,5 +291,14 @@ function animationLoop() {
   camcontrols.target.y = foco_camara.position.y;
   camcontrols.target.z = foco_camara.position.z;
   camcontrols.update();
+  if (foco_camara.userData.anillo != undefined) {
+    carpetaRotacion.show();
+    rotacionAnilloX.setValue(foco_camara.userData.anillo.rotation.x);
+    rotacionAnilloY.setValue(foco_camara.userData.anillo.rotation.y);
+    rotacionAnilloZ.setValue(foco_camara.userData.anillo.rotation.z);
+  }
+  else {
+    carpetaRotacion.hide();
+  }
   renderer.render(escena, camara);
 }
