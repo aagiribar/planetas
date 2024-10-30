@@ -37,7 +37,6 @@ function init() {
   document.body.appendChild(renderer.domElement);
 
   camcontrols = new OrbitControls(camara, renderer.domElement);
-  camcontrols.autoRotate = true;
 
   const tx_sol = new THREE.TextureLoader().load(
     "sunmap.jpg"
@@ -104,6 +103,30 @@ function init() {
   const trans_anillo_sat = new THREE.TextureLoader().load(
     "saturnringpattern.gif"
   )
+
+  const tx_urano = new THREE.TextureLoader().load(
+    "uranusmap.jpg"
+  )
+
+  const tx_anillo_ur = new THREE.TextureLoader().load(
+    "uranusringcolour.jpg"
+  )
+
+  const trans_anillo_ur = new THREE.TextureLoader().load(
+    "uranusringtrans.gif"
+  )
+
+  const tx_neptuno = new THREE.TextureLoader().load(
+    "neptunemap.jpg"
+  )
+
+  const tx_pluton = new THREE.TextureLoader().load(
+    "plutomap2k.jpg"
+  )
+
+  const bump_pluton = new THREE.TextureLoader().load(
+    "plutobump2k.jpg"
+  )
   
   Planeta(15, 0, 0, 0.24, 0xffffff, 1, 1, 1, "Mercurio", tx_merc, bump_merc);
   Planeta(25, 0, 0, 0.60, 0xffffff, 1, 1, 1, "Venus", tx_venus, bump_venus);
@@ -113,6 +136,10 @@ function init() {
   Planeta(70, 0, 0, 7.77, 0xffffff, 1, 1, 1, "Jupiter", tx_jupiter);
   Planeta(100, 0, 0, 5.85, 0xffffff, 1, 1, 1, "Saturno", tx_saturno);
   Anillo(objetos[6].position.x, objetos[6].position.y, objetos[6].position.z, objetos[6], 7, 10, 0xdaca8f, tx_anillo_sat, trans_anillo_sat);
+  Planeta(120, 0, 0, 2.55, 0xffffff, 1, 1, 1, "Urano", tx_urano);
+  Anillo(objetos[7].position.x, objetos[7].position.y, objetos[7].position.z, objetos[7], 3, 4, 0xffffff, tx_anillo_ur, trans_anillo_ur);
+  Planeta(140, 0, 0, 2.47, 0xffffff, 1, 1, 1, "Neptuno", tx_neptuno);
+  Planeta(160, 0, 0, 0.11, 0xffffff, 1, 1, 1, "Plutón", tx_pluton, bump_pluton);
 
   luz = new THREE.PointLight();
   luz.position.set(0,0,0);
@@ -124,7 +151,7 @@ function init() {
   const carpetaCamara = gui.addFolder("Cámara");
   elementosUI = {
     "Objeto seleccionado": "Sol",
-    "Rotación automática": true,
+    "Rotación automática": false,
     "Rotación en X": Math.PI / 2,
     "Rotación en Y": Math.PI / 4,
     "Rotación en Z": 0
