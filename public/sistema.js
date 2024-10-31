@@ -1,8 +1,9 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js';
-import { FlyControls } from 'three/examples/jsm/controls/FlyControls'
-let escena, renderer, camaraGeneral, camaraNave;
+import { FlyControls } from 'three/examples/jsm/controls/FlyControls';
+
+let escena, renderer, camaraOrbital, camaraNave;
 let estrella;
 let objetos = [];
 let anillos = [];
@@ -10,7 +11,7 @@ let luz;
 let foco_camara;
 let raycaster;
 let orbitCamControls, flyCamControls;
-let usarVistaNave;
+let usarVistaNave, usarVistaOrbital;
 let nubes;
 let elementosUI;
 let selectorCamara;
@@ -31,13 +32,13 @@ animationLoop();
 
 function init() {
   escena = new THREE.Scene();
-  camaraGeneral = new THREE.PerspectiveCamera(
+  camaraOrbital = new THREE.PerspectiveCamera(
     75,
     window.innerWidth / window.innerHeight,
     0.1,
     1000
   );
-  camaraGeneral.position.set(0, 0, 70);
+  camaraOrbital.position.set(0, 0, 70);
 
   camaraNave = new THREE.PerspectiveCamera(
     75,
@@ -51,14 +52,15 @@ function init() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
 
-  orbitCamControls = new OrbitControls(camaraGeneral, renderer.domElement);
+  orbitCamControls = new OrbitControls(camaraOrbital, renderer.domElement);
   flyCamControls = new FlyControls(camaraNave, renderer.domElement);
   flyCamControls.dragToLook = true;
   flyCamControls.movementSpeed = 10;
   flyCamControls.rollSpeed = Math.PI / 16;
   reloj = new THREE.Clock();
-  usarVistaNave = false;
   flyCamControls.enabled = false;
+  usarVistaNave = false;
+  usarVistaOrbital = true;
 
   const tx_sol = new THREE.TextureLoader().load(
     "sunmap.jpg"
@@ -216,19 +218,29 @@ function init() {
   carpetaSimulacion.add(elementosUI, "Velocidad de rotación", 0, 2, 0.01).onChange(function (valor) {
     velocidadRotacion = valor;
   });
-  carpetaCamara.add(elementosUI, "Vista seleccionada", ["Vista orbital", "Vista desde nave"]).onChange(function (valor) {
+  carpetaCamara.add(elementosUI, "Vista seleccionada", ["Vista orbital", "Vista desde nave", "Ambas"]).onChange(function (valor) {
     if (valor == "Vista desde nave") {
       usarVistaNave = true;
+      usarVistaOrbital = false;
       selectorCamara.hide();
       selectorRotacion.hide();
-      flyCamControls.enabled = true;
+      flyCamControls.enabled = false;
       orbitCamControls.enabled = false;
     }
-    else {
+    else if (valor == "Vista orbital") {
       usarVistaNave = false;
+      usarVistaOrbital = true;
       selectorCamara.show();
       selectorRotacion.show();
       flyCamControls.enabled = false;
+      orbitCamControls.enabled = true;
+    }
+    else if (valor == "Ambas") {
+      usarVistaNave = true;
+      usarVistaOrbital = true;
+      selectorCamara.show();
+      selectorRotacion.show();
+      flyCamControls.enabled = true;
       orbitCamControls.enabled = true;
     }
   });
@@ -369,7 +381,7 @@ function onDocumentMouseDown(event) {
     };
 
     //Intersección, define rayo
-    raycaster.setFromCamera(mouse, camaraGeneral);
+    raycaster.setFromCamera(mouse, camaraOrbital);
     
     const intersecciones = raycaster.intersectObjects(objetos);
     if (intersecciones.length > 0) {
@@ -418,10 +430,50 @@ function animationLoop() {
 
   flyCamControls.update(delta);
 
-  if (usarVistaNave) {
+  let x, y, w, h;
+  if (usarVistaNave && usarVistaOrbital) {
+
+    x = Math.floor(window.innerWidth * 0.0);
+    y = Math.floor(window.innerHeight * 0.0);
+    w = Math.floor(window.innerWidth * 0.5);
+    h = Math.floor(window.innerHeight * 1.0);
+
+    renderer.setViewport(x, y, w, h);
+    renderer.setScissor(x,y,w,h);
+    renderer.setScissorTest(true);
+    camaraOrbital.aspect = w / h;
+    camaraOrbital.updateProjectionMatrix();
+    renderer.render(escena, camaraOrbital);
+
+    x = Math.floor(window.innerWidth * 0.5);
+    y = Math.floor(window.innerHeight * 0.0);
+    w = Math.floor(window.innerWidth * 1.0);
+    h = Math.floor(window.innerHeight * 1.0);
+
+    renderer.setViewport(x, y, w, h);
+    renderer.setScissor( x,y,w,h );
+    camaraNave.aspect = w / h;
+    camaraNave.updateProjectionMatrix();
     renderer.render(escena, camaraNave);
   }
-  else {
-    renderer.render(escena, camaraGeneral);
+  else  {
+    x = Math.floor(window.innerWidth * 0.0);
+    y = Math.floor(window.innerHeight * 0.0);
+    w = Math.floor(window.innerWidth * 1.0);
+    h = Math.floor(window.innerHeight * 1.0);
+
+    renderer.setViewport(x, y, w, h);
+    renderer.setScissor( x,y,w,h );
+    
+    if (usarVistaOrbital) {
+      camaraOrbital.aspect = w / h;
+      camaraOrbital.updateProjectionMatrix();
+      renderer.render(escena, camaraOrbital);
+    }
+    else if (usarVistaNave) {
+      camaraNave.aspect = w / h;
+      camaraNave.updateProjectionMatrix();
+      renderer.render(escena, camaraNave);
+    }
   }
 }
