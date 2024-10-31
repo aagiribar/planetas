@@ -19,6 +19,8 @@ let rotacionAnilloX, rotacionAnilloY, rotacionAnilloZ;
 let t0 = 0;
 let accglobal = 0.001;
 let timestamp;
+let velocidadTraslacion = 1;
+let velocidadRotacion = 1;
 
 const gui = new GUI();
 
@@ -131,18 +133,18 @@ function init() {
     "plutobump2k.jpg"
   )
   
-  Planeta(15, 0, 0, 0.24, 0xffffff, 1, 1, 1, "Mercurio", tx_merc, bump_merc);
-  Planeta(25, 0, 0, 0.60, 0xffffff, 1, 1, 1, "Venus", tx_venus, bump_venus);
-  Planeta(35, 0, 0, 0.38, 0xffffff, 1, 1, 1, "Tierra", tx_tierra, bump_tierra, spec_tierra);
-  Planeta(35, 0, 0, 0.39, 0xffffff, 1, 1, 1, undefined, nubes_tierra, undefined, undefined, trans_nubes);
-  Planeta(45, 0, 0, 0.34, 0xffffff, 1, 1, 1, "Marte", tx_marte, bump_marte);
-  Planeta(70, 0, 0, 7.77, 0xffffff, 1, 1, 1, "Jupiter", tx_jupiter);
-  Planeta(100, 0, 0, 5.85, 0xffffff, 1, 1, 1, "Saturno", tx_saturno);
+  Planeta(15, 0, 0, 0.24, 0xffffff, 1.61, 0.01, 1, 1, "Mercurio", tx_merc, bump_merc);
+  Planeta(25, 0, 0, 0.60, 0xffffff, 1.17, 0.01, 1, 1, "Venus", tx_venus, bump_venus);
+  Planeta(35, 0, 0, 0.38, 0xffffff, 1, 0.01, 1, 1, "Tierra", tx_tierra, bump_tierra, spec_tierra);
+  Planeta(35, 0, 0, 0.39, 0xffffff, 1, 1, 1, 1, undefined, nubes_tierra, undefined, undefined, trans_nubes);
+  Planeta(45, 0, 0, 0.34, 0xffffff, 0.81, 0.01, 1, 1, "Marte", tx_marte, bump_marte);
+  Planeta(70, 0, 0, 7.77, 0xffffff, 0.43, 0.01, 1, 1, "Jupiter", tx_jupiter);
+  Planeta(100, 0, 0, 5.85, 0xffffff, 0.32, 0.01, 1, 1, "Saturno", tx_saturno);
   Anillo(objetos[6].position.x, objetos[6].position.y, objetos[6].position.z, objetos[6], 7, 10, 0xdaca8f, tx_anillo_sat, trans_anillo_sat);
-  Planeta(120, 0, 0, 2.55, 0xffffff, 1, 1, 1, "Urano", tx_urano);
+  Planeta(120, 0, 0, 2.55, 0xffffff, 0.22, 0.01, 1, 1, "Urano", tx_urano);
   Anillo(objetos[7].position.x, objetos[7].position.y, objetos[7].position.z, objetos[7], 3, 4, 0xffffff, tx_anillo_ur, trans_anillo_ur);
-  Planeta(140, 0, 0, 2.47, 0xffffff, 1, 1, 1, "Neptuno", tx_neptuno);
-  Planeta(160, 0, 0, 0.11, 0xffffff, 1, 1, 1, "Plutón", tx_pluton, bump_pluton);
+  Planeta(140, 0, 0, 2.47, 0xffffff, 0.17, 0.01, 1, 1, "Neptuno", tx_neptuno);
+  Planeta(160, 0, 0, 0.11, 0xffffff, 0.15, 0.01, 1, 1, "Plutón", tx_pluton, bump_pluton);
 
   luz = new THREE.PointLight();
   luz.position.set(0,0,0);
@@ -157,7 +159,9 @@ function init() {
     "Rotación automática": false,
     "Rotación en X": Math.PI / 2,
     "Rotación en Y": Math.PI / 4,
-    "Rotación en Z": 0
+    "Rotación en Z": 0,
+    "Velocidad de traslación": 1,
+    "Velocidad de rotación": 1
   };
   selectorCamara = carpetaCamara.add(elementosUI, "Objeto seleccionado", obtenerNombresObjetos());
   selectorCamara.onChange(function (valor) {
@@ -186,6 +190,14 @@ function init() {
   rotacionAnilloZ.onChange(function (valor) {
     foco_camara.userData.anillo.rotation.z = valor;
   });
+
+  let carpetaSimulacion = gui.addFolder("Simulación");
+  carpetaSimulacion.add(elementosUI, "Velocidad de traslación", 0, 2, 0.01).onChange(function (valor) {
+    velocidadTraslacion = valor;
+  });
+  carpetaSimulacion.add(elementosUI, "Velocidad de rotación", 0, 2, 0.01).onChange(function (valor) {
+    velocidadRotacion = valor;
+  })
 }
 
 function Estrella(radio, textura = undefined) {
@@ -202,7 +214,7 @@ function Estrella(radio, textura = undefined) {
   escena.add(estrella);
 }
 
-function Planeta(x, y, z, radio, color, vel, f1, f2, nombre, textura = undefined, texbump = undefined, texspec = undefined, texalpha = undefined, sombra = false) {
+function Planeta(x, y, z, radio, color, velTras, velRot, f1, f2, nombre, textura = undefined, texbump = undefined, texspec = undefined, texalpha = undefined, sombra = false) {
   let geometry = new THREE.SphereBufferGeometry(radio, 30, 30);
   //Material Phong definiendo color
   let material = new THREE.MeshPhongMaterial({
@@ -242,7 +254,8 @@ function Planeta(x, y, z, radio, color, vel, f1, f2, nombre, textura = undefined
   }
 
   let planeta = new THREE.Mesh(geometry, material);
-  planeta.userData.vel = vel;
+  planeta.userData.velTras = velTras;
+  planeta.userData.velRot = velRot;
   planeta.userData.f1 = f1;
   planeta.userData.f2 = f2;
   planeta.userData.dist = Math.sqrt(Math.pow(x, 2) + Math.pow(z, 2));
@@ -335,7 +348,7 @@ function onDocumentMouseDown(event) {
 function animationLoop() {
   timestamp = (Date.now() - t0) * accglobal;
   requestAnimationFrame(animationLoop);
-  estrella.rotation.y += 0.01;
+  estrella.rotation.y += (0.01) * velocidadRotacion;
   camcontrols.target.x = foco_camara.position.x;
   camcontrols.target.y = foco_camara.position.y;
   camcontrols.target.z = foco_camara.position.z;
@@ -352,19 +365,20 @@ function animationLoop() {
   for (let object of objetos) {
     if (object.userData.nombre == "Sol") continue;
     object.position.x =
-      Math.cos(timestamp * object.userData.vel) *
+      Math.cos(timestamp * (object.userData.velTras * velocidadTraslacion)) *
       object.userData.f1 *
       object.userData.dist;
     object.position.z =
-      Math.sin(timestamp * object.userData.vel) *
+      Math.sin(timestamp * (object.userData.velTras * velocidadTraslacion)) *
       object.userData.f2 *
       object.userData.dist;
     if (object.userData.anillo != undefined) {
       object.userData.anillo.position.x = object.position.x;
       object.userData.anillo.position.z = object.position.z;
     }
-    nubes.position.x = objetos[3].position.x;
-    nubes.position.z = objetos[3].position.z;
+    object.rotation.y += (object.userData.velRot * velocidadRotacion);
   }
+  nubes.position.x = objetos[3].position.x;
+  nubes.position.z = objetos[3].position.z;
   renderer.render(escena, camara);
 }
