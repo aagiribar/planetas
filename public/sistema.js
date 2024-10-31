@@ -35,6 +35,7 @@ init();
 animationLoop();
 
 function init() {
+  // Información en pantalla sobre como controlar las camaras
   info = document.createElement('div');
   info.style.position = 'absolute';
   info.style.top = '30px';
@@ -52,6 +53,7 @@ function init() {
   infoCamaraOrbital.innerHTML = "Controles de camara órbital<br>Movimiento: Arrastre con el ratón.<br>Zoom: Rueda del ratón<br>Enfocar un planeta o estrella: Click derecho"
   infoCamaraNave.innerHTML = "Controles de camara de nave<br>Movimiento de la nave: WASD<br>Movimiento de la camara: Arrastre con el ratón o flechas direccionales"
   info.appendChild(infoCamaraOrbital);
+  
   // Creación de la escena
   escena = new THREE.Scene();
   // Creación de la camara controlada con el control orbital (vista general)
