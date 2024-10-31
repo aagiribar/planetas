@@ -16,6 +16,9 @@ let selectorCamara;
 let selectorRotacion;
 let carpetaRotacion;
 let rotacionAnilloX, rotacionAnilloY, rotacionAnilloZ;
+let t0 = 0;
+let accglobal = 0.001;
+let timestamp;
 
 const gui = new GUI();
 
@@ -239,6 +242,10 @@ function Planeta(x, y, z, radio, color, vel, f1, f2, nombre, textura = undefined
   }
 
   let planeta = new THREE.Mesh(geometry, material);
+  planeta.userData.vel = vel;
+  planeta.userData.f1 = f1;
+  planeta.userData.f2 = f2;
+  planeta.userData.dist = Math.sqrt(Math.pow(x, 2) + Math.pow(z, 2));
   if (sombra) planeta.castShadow = true;
   planeta.position.set(x, y, z);
   planeta.userData.nombre = nombre;
@@ -249,6 +256,20 @@ function Planeta(x, y, z, radio, color, vel, f1, f2, nombre, textura = undefined
   else {
     nubes = planeta;
   }
+  let curve = new THREE.EllipseCurve(
+    0,
+    0, // centro
+    planeta.userData.dist * f1,
+    planeta.userData.dist * f2 // radios elipse
+  );
+  //Crea geometría
+  let points = curve.getPoints(50);
+  let geome = new THREE.BufferGeometry().setFromPoints(points);
+  let mate = new THREE.LineBasicMaterial({ color: 0xffffff });
+  // Objeto
+  let orbita = new THREE.Line(geome, mate);
+  orbita.rotation.x += Math.PI / 2;
+  escena.add(orbita);
 }
 
 function Anillo(x, y, z, planeta, radioInterno, radioExterno, color, textura = undefined, texalpha = undefined, sombra = false) {
@@ -312,6 +333,7 @@ function onDocumentMouseDown(event) {
 }
 
 function animationLoop() {
+  timestamp = (Date.now() - t0) * accglobal;
   requestAnimationFrame(animationLoop);
   estrella.rotation.y += 0.01;
   camcontrols.target.x = foco_camara.position.x;
@@ -326,6 +348,23 @@ function animationLoop() {
   }
   else {
     carpetaRotacion.hide();
+  }
+  for (let object of objetos) {
+    if (object.userData.nombre == "Sol") continue;
+    object.position.x =
+      Math.cos(timestamp * object.userData.vel) *
+      object.userData.f1 *
+      object.userData.dist;
+    object.position.z =
+      Math.sin(timestamp * object.userData.vel) *
+      object.userData.f2 *
+      object.userData.dist;
+    if (object.userData.anillo != undefined) {
+      object.userData.anillo.position.x = object.position.x;
+      object.userData.anillo.position.z = object.position.z;
+    }
+    nubes.position.x = objetos[3].position.x;
+    nubes.position.z = objetos[3].position.z;
   }
   renderer.render(escena, camara);
 }
