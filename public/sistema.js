@@ -24,6 +24,7 @@ let timestamp;
 let velocidadTraslacion = 1;
 let velocidadRotacion = 1;
 let reloj;
+let info, infoCamaraOrbital, infoCamaraNave;
 
 // Creación de la interfaz de usuario
 const gui = new GUI();
@@ -34,6 +35,23 @@ init();
 animationLoop();
 
 function init() {
+  info = document.createElement('div');
+  info.style.position = 'absolute';
+  info.style.top = '30px';
+  info.style.width = '100%';
+  info.style.textAlign = 'center';
+  info.style.color = '#fff';
+  info.style.fontWeight = 'bold';
+  info.style.backgroundColor = 'transparent';
+  info.style.zIndex = '1';
+  info.style.fontFamily = 'Monospace';
+  info.innerHTML = "La simulación puede ser controlada desde el panel de la derecha";
+  document.body.appendChild(info);
+  infoCamaraOrbital = document.createElement("div");
+  infoCamaraNave = document.createElement("div");
+  infoCamaraOrbital.innerHTML = "Controles de camara órbital<br>Movimiento: Arrastre con el ratón.<br>Zoom: Rueda del ratón<br>Enfocar un planeta o estrella: Click derecho"
+  infoCamaraNave.innerHTML = "Controles de camara de nave<br>Movimiento de la nave: WASD<br>Movimiento de la camara: Arrastre con el ratón o flechas direccionales"
+  info.appendChild(infoCamaraOrbital);
   // Creación de la escena
   escena = new THREE.Scene();
   // Creación de la camara controlada con el control orbital (vista general)
@@ -263,6 +281,8 @@ function init() {
       selectorRotacion.hide();
       flyCamControls.enabled = false;
       orbitCamControls.enabled = false;
+      info.removeChild(infoCamaraOrbital);
+      info.appendChild(infoCamaraNave);
     }
     else if (valor == "Vista orbital") {
       usarVistaNave = false;
@@ -271,6 +291,8 @@ function init() {
       selectorRotacion.show();
       flyCamControls.enabled = false;
       orbitCamControls.enabled = true;
+      info.removeChild(infoCamaraNave);
+      info.appendChild(infoCamaraOrbital);
     }
     else if (valor == "Ambas") {
       usarVistaNave = true;
@@ -279,6 +301,8 @@ function init() {
       selectorRotacion.show();
       flyCamControls.enabled = true;
       orbitCamControls.enabled = true;
+      info.appendChild(infoCamaraOrbital);
+      info.appendChild(infoCamaraNave);
     }
   });
 }
