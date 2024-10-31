@@ -25,13 +25,18 @@ let velocidadTraslacion = 1;
 let velocidadRotacion = 1;
 let reloj;
 
+// Creación de la interfaz de usuario
 const gui = new GUI();
 
+// Se inicializa la simulación
 init();
+// Se inicial el bucle de animación
 animationLoop();
 
 function init() {
+  // Creación de la escena
   escena = new THREE.Scene();
+  // Creación de la camara controlada con el control orbital (vista general)
   camaraOrbital = new THREE.PerspectiveCamera(
     75,
     window.innerWidth / window.innerHeight,
@@ -40,6 +45,7 @@ function init() {
   );
   camaraOrbital.position.set(0, 0, 70);
 
+  // Creación de la camara controlada por el control de vuelo (vista de nave)
   camaraNave = new THREE.PerspectiveCamera(
     75,
     window.innerWidth / window.innerHeight,
@@ -48,26 +54,38 @@ function init() {
   );
   camaraNave.position.set(0, 0, 70);
 
+  // Creación del renderer
   renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
 
+  // Creación del control de tipo orbital
   orbitCamControls = new OrbitControls(camaraOrbital, renderer.domElement);
+  
+  // Creación del control de tipo vuelo
   flyCamControls = new FlyControls(camaraNave, renderer.domElement);
   flyCamControls.dragToLook = true;
   flyCamControls.movementSpeed = 10;
   flyCamControls.rollSpeed = Math.PI / 16;
+
+  // Creación de un objeto de tipo Clock para la actualización de los controles de vuelo
   reloj = new THREE.Clock();
+
+  // Modo inicial de vista (vista orbital)
   flyCamControls.enabled = false;
   usarVistaNave = false;
   usarVistaOrbital = true;
 
+  // Carga de la textura del sol
   const tx_sol = new THREE.TextureLoader().load(
     "sunmap.jpg"
   );
+  // Creación de el objeto que representa al sol
   Estrella(10, tx_sol);
+  // Al empezar la simulación la camara orbita alrededor del sol
   foco_camara = estrella;
   
+  // Carga de las texturas, mapas de rugosidad y mapas de transparencia de los planetas y sus anillos
   const tx_merc = new THREE.TextureLoader().load(
     "mercurymap.jpg"
   );
@@ -152,6 +170,7 @@ function init() {
     "plutobump2k.jpg"
   )
   
+  // Creación de los planetas y anillos
   Planeta(15, 0, 0, 0.24, 0xffffff, 1.61, 0.01, 1, 1, "Mercurio", tx_merc, bump_merc);
   Planeta(25, 0, 0, 0.60, 0xffffff, 1.17, 0.01, 1, 1, "Venus", tx_venus, bump_venus);
   Planeta(35, 0, 0, 0.38, 0xffffff, 1, 0.01, 1, 1, "Tierra", tx_tierra, bump_tierra, spec_tierra);
@@ -165,14 +184,16 @@ function init() {
   Planeta(140, 0, 0, 2.47, 0xffffff, 0.17, 0.01, 1, 1, "Neptuno", tx_neptuno);
   Planeta(160, 0, 0, 0.11, 0xffffff, 0.15, 0.01, 1, 1, "Plutón", tx_pluton, bump_pluton);
 
+  // Creación de una luz puntual que representará la luz del sol
   luz = new THREE.PointLight();
   luz.position.set(0,0,0);
   escena.add(luz);
   
+  // Creación del Raycaster para implementar enfocar la cámara hacieno click derecho sobre un planeta
   raycaster = new THREE.Raycaster();
   document.addEventListener("mousedown", onDocumentMouseDown);
   
-  const carpetaCamara = gui.addFolder("Cámara");
+  // Objeto que almacena los elementos de la interfaz de usuario
   elementosUI = {
     "Objeto seleccionado": "Sol",
     "Rotación automática": false,
@@ -183,18 +204,29 @@ function init() {
     "Velocidad de rotación": 1,
     "Vista seleccionada": "Vista orbital"
   };
+  // Creación de carpeta para almacenar los controles de camara
+  const carpetaCamara = gui.addFolder("Cámara");
+
+  // Selector de objeto sobre el que orbitará la camara (camara orbital)
   selectorCamara = carpetaCamara.add(elementosUI, "Objeto seleccionado", obtenerNombresObjetos());
   selectorCamara.onChange(function (valor) {
     foco_camara = objetos.find((objeto) => {
       return objeto.userData.nombre === valor;
     });
   });
+
+  // Selector de rotación automática de la camara (camara orbital)
   selectorRotacion = carpetaCamara.add(elementosUI, "Rotación automática");
   selectorRotacion.onChange(function (valor) {
     orbitCamControls.autoRotate = valor;
   });
+
+  // Creación de carpeta para almacenar los controles sobre los planetas
   let carpetaPlaneta = gui.addFolder("Planeta");
+
+  // Creación de carpeta para almacenar los controles de rotación de los anillos de los planetas (Saturno y Urano)
   carpetaRotacion = carpetaPlaneta.addFolder("Rotación del anillo");
+  // Controles de rotación del anillo en los 3 angulos
   rotacionAnilloX = carpetaRotacion.add(elementosUI, "Rotación en X", 0, Math.PI * 2, 0.01);
   rotacionAnilloY = carpetaRotacion.add(elementosUI, "Rotación en Y", 0, Math.PI * 2, 0.01);
   rotacionAnilloZ = carpetaRotacion.add(elementosUI, "Rotación en Z", 0, Math.PI * 2, 0.01);
@@ -211,13 +243,18 @@ function init() {
     foco_camara.userData.anillo.rotation.z = valor;
   });
 
+  // Creación de carpeta para almacenar los controles sobre la simulación
   let carpetaSimulacion = gui.addFolder("Simulación");
+  // Control de velocidad de traslación de los planetas
   carpetaSimulacion.add(elementosUI, "Velocidad de traslación", 0, 2, 0.01).onChange(function (valor) {
     velocidadTraslacion = valor;
   });
+  // Control de velocidad de rotación de los planetas
   carpetaSimulacion.add(elementosUI, "Velocidad de rotación", 0, 2, 0.01).onChange(function (valor) {
     velocidadRotacion = valor;
   });
+
+  // Selector de camaras
   carpetaCamara.add(elementosUI, "Vista seleccionada", ["Vista orbital", "Vista desde nave", "Ambas"]).onChange(function (valor) {
     if (valor == "Vista desde nave") {
       usarVistaNave = true;
@@ -246,6 +283,10 @@ function init() {
   });
 }
 
+// Función para crear una estrella en el centro de la simulación
+// Parámetros:
+// radio: Radio de la estrella
+// textura: Textura que se aplicará a la estrella
 function Estrella(radio, textura = undefined) {
   let geometria = new THREE.SphereGeometry(radio, 30, 30);
   let material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
@@ -260,7 +301,19 @@ function Estrella(radio, textura = undefined) {
   escena.add(estrella);
 }
 
-function Planeta(x, y, z, radio, color, velTras, velRot, f1, f2, nombre, textura = undefined, texbump = undefined, texspec = undefined, texalpha = undefined, sombra = false) {
+// Función para crear un planeta en la simulación
+// Parámetros:
+// x, y, z: Coordenadas iniciales donde se creará el planeta
+// radio: Radio del planeta
+// color: Color del planeta
+// velTras: Velocidad de traslación del planeta (movimiento alrededor del sol)
+// velRot: Velocidad de rotación del planeta (movimiento sobre su propio eje)
+// f1, f2: Valores de los ejes de la elipse de la órbita
+// textura: Textura que se aplicará al planeta
+// texbump: Mapa de rugosidad que se aplicará al planeta
+// texspec: Mapa para determinar las zonas de reflexión especular del planeta
+// texalpha: Mapa de transparencias del planetas
+function Planeta(x, y, z, radio, color, velTras, velRot, f1, f2, nombre, textura = undefined, texbump = undefined, texspec = undefined, texalpha = undefined) {
   let geometry = new THREE.SphereBufferGeometry(radio, 30, 30);
   //Material Phong definiendo color
   let material = new THREE.MeshPhongMaterial({
@@ -305,16 +358,21 @@ function Planeta(x, y, z, radio, color, velTras, velRot, f1, f2, nombre, textura
   planeta.userData.f1 = f1;
   planeta.userData.f2 = f2;
   planeta.userData.dist = Math.sqrt(Math.pow(x, 2) + Math.pow(z, 2));
-  if (sombra) planeta.castShadow = true;
+  planeta.castShadow = true;
+  planeta.receiveShadow = true;
   planeta.position.set(x, y, z);
   planeta.userData.nombre = nombre;
   escena.add(planeta);
+
+  // Si no tiene nombre se trata de la esfera con textura de nubes de la tierra
   if (nombre != undefined) {
     objetos.push(planeta);
   }
   else {
     nubes = planeta;
   }
+
+  // Creación de la curva para representar la orbita
   let curve = new THREE.EllipseCurve(
     0,
     0, // centro
@@ -331,17 +389,27 @@ function Planeta(x, y, z, radio, color, velTras, velRot, f1, f2, nombre, textura
   escena.add(orbita);
 }
 
-function Anillo(x, y, z, planeta, radioInterno, radioExterno, color, textura = undefined, texalpha = undefined, sombra = false) {
+// Función para crear los anillos de un planeta
+// Parámetros: 
+// x, y, z: Coordenadas iniciales donde se creará el anillo
+// radioInterno: Valor del radio interior del anillo
+// radioExterno: Valor del radio exterior del anillo
+// color: Color del anillo
+// textura: Textura que se aplicará al anillo
+// texalpha: Mapa de transparencias del anillo
+function Anillo(x, y, z, planeta, radioInterno, radioExterno, color, textura = undefined, texalpha = undefined) {
   let geometria = new THREE.RingGeometry(radioInterno, radioExterno);
   let material = new THREE.MeshPhongMaterial({
     color: color,
     side: THREE.DoubleSide
   });
 
+  // Textura del anillo
   if (textura != undefined){
     material.map = textura;
   }
 
+  // Transparencia del anillos
   if (texalpha != undefined){
     //Con mapa de transparencia
     material.alphaMap = texalpha;
@@ -358,13 +426,15 @@ function Anillo(x, y, z, planeta, radioInterno, radioExterno, color, textura = u
   }
 
   let anillo = new THREE.Mesh(geometria, material);
-  if (sombra) anillo.castShadow = true;
+  anillo.castShadow = true;
+  anillo.receiveShadow = true;
   anillo.position.set(x, y, z);
   escena.add(anillo);
   anillos.push(anillo);
   planeta.userData.anillo = anillo;
 }
 
+// Función para obtener un array con el nombre de los objetos creados
 function obtenerNombresObjetos() {
   let nombres = []
   for (const objeto of objetos) {
@@ -373,6 +443,8 @@ function obtenerNombresObjetos() {
   return nombres;
 }
 
+// Función para controlar el evento de ratón cuando se hace click
+// Se utiliza para cambiar el foco de la camara orbital al hacer click derecho en un planeta
 function onDocumentMouseDown(event) {
   if (event.buttons == 2) {
     const mouse = {
@@ -380,28 +452,36 @@ function onDocumentMouseDown(event) {
     y: -(event.clientY / renderer.domElement.clientHeight) * 2 + 1,
     };
 
-    //Intersección, define rayo
+    // Intersección, define rayo
     raycaster.setFromCamera(mouse, camaraOrbital);
     
+    // Se detectan las intersecciones con el rayo
     const intersecciones = raycaster.intersectObjects(objetos);
     if (intersecciones.length > 0) {
+      // Se cambia el foco de la camara
       foco_camara = intersecciones[0].object;
+      // Se actualiza el selector en la interfaz de usuario
       selectorCamara.setValue(foco_camara.userData.nombre);
     }
   }
 }
 
+// Bucle de animación
 function animationLoop() {
   timestamp = (Date.now() - t0) * accglobal;
   const delta = reloj.getDelta();
   requestAnimationFrame(animationLoop);
+  // Rotación del sol
   estrella.rotation.y += (0.01) * velocidadRotacion;
+  // Se recoloca el foco de la camara orbital
   orbitCamControls.target.x = foco_camara.position.x;
   orbitCamControls.target.y = foco_camara.position.y;
   orbitCamControls.target.z = foco_camara.position.z;
   orbitCamControls.update();
+  // Se muestran los controles de rotación de anillo si esta seleccionado un planeta con anillos (Saturno o Urano)
   if (foco_camara.userData.anillo != undefined) {
     carpetaRotacion.show();
+    // Se actualiza el valor mostrado en la interfaz de usuario
     rotacionAnilloX.setValue(foco_camara.userData.anillo.rotation.x);
     rotacionAnilloY.setValue(foco_camara.userData.anillo.rotation.y);
     rotacionAnilloZ.setValue(foco_camara.userData.anillo.rotation.z);
@@ -411,6 +491,7 @@ function animationLoop() {
   }
   for (let object of objetos) {
     if (object.userData.nombre == "Sol") continue;
+    // Se calcula la posición de los planetas para implementar la traslación
     object.position.x =
       Math.cos(timestamp * (object.userData.velTras * velocidadTraslacion)) *
       object.userData.f1 *
@@ -419,52 +500,69 @@ function animationLoop() {
       Math.sin(timestamp * (object.userData.velTras * velocidadTraslacion)) *
       object.userData.f2 *
       object.userData.dist;
+    // Si el objeto tiene anillos, se actualiza la posición de los mismos para que se trasladen con él
     if (object.userData.anillo != undefined) {
       object.userData.anillo.position.x = object.position.x;
       object.userData.anillo.position.z = object.position.z;
     }
+    // Se rota el objeto
     object.rotation.y += (object.userData.velRot * velocidadRotacion);
   }
+  // Se actualiza la posición de la esfera de nubes de la tierra
   nubes.position.x = objetos[3].position.x;
   nubes.position.z = objetos[3].position.z;
 
+  // Se actualiza el control de vuelo
   flyCamControls.update(delta);
 
+  // Se definen las variables para configurar los puertos de vista en función del modo de camara seleccionado
   let x, y, w, h;
+  // Si seleccionan ambas camaras
   if (usarVistaNave && usarVistaOrbital) {
 
+    // Se calculan las dimensiones del puerto de vista de forma que la camara orbital ocupe la mitad izquierda de la pantalla
     x = Math.floor(window.innerWidth * 0.0);
     y = Math.floor(window.innerHeight * 0.0);
     w = Math.floor(window.innerWidth * 0.5);
     h = Math.floor(window.innerHeight * 1.0);
 
+    // Se establece el puerto de vista
     renderer.setViewport(x, y, w, h);
     renderer.setScissor(x,y,w,h);
     renderer.setScissorTest(true);
+    // Se actualiza la relación de aspecto de la camara
     camaraOrbital.aspect = w / h;
     camaraOrbital.updateProjectionMatrix();
+    // Se renderiza la escena con la camara orbital
     renderer.render(escena, camaraOrbital);
 
+    // A continuación, Se calculan las dimensiones del puerto de vista de forma que la camara de la nave ocupe la mitad derecha de la pantalla
     x = Math.floor(window.innerWidth * 0.5);
     y = Math.floor(window.innerHeight * 0.0);
     w = Math.floor(window.innerWidth * 1.0);
     h = Math.floor(window.innerHeight * 1.0);
 
+    // Se establece el puerto de vista
     renderer.setViewport(x, y, w, h);
-    renderer.setScissor( x,y,w,h );
+    renderer.setScissor(x,y,w,h);
+    // Se actualiza la relación de aspecto de la camara
     camaraNave.aspect = w / h;
     camaraNave.updateProjectionMatrix();
+    // Se renderiza la escena con la camara de la nave
     renderer.render(escena, camaraNave);
   }
   else  {
+    // Se calculan las dimensiones del puerto de vista para que este ocupe toda la pantalla
     x = Math.floor(window.innerWidth * 0.0);
     y = Math.floor(window.innerHeight * 0.0);
     w = Math.floor(window.innerWidth * 1.0);
     h = Math.floor(window.innerHeight * 1.0);
 
+    // Se establece el puerto de vista
     renderer.setViewport(x, y, w, h);
     renderer.setScissor( x,y,w,h );
     
+    // Se renderiza con la camara seleccionada actualizando la relación de aspecto antes
     if (usarVistaOrbital) {
       camaraOrbital.aspect = w / h;
       camaraOrbital.updateProjectionMatrix();
