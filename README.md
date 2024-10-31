@@ -1,48 +1,50 @@
-# Hello website!
+# Visor del Sistema Solar
+## Agustín Alfonso González Iríbar
 
-This is a basic HTML starter project you can build on however you like. No need to save. While you develop your site, your changes will happen ✨ immediately in the preview window. On the left you'll see the files that make up your site, including HTML, JavaScript, and CSS. You can upload assets like images or audio in `assets`. The rest is up to you and your imagination. 🦄
+Simulación del sistema solar realizada con _three.js_ en la que se encuentran simulados el sol y todos los planetas del Sistema Solar (incluido Plutón).
 
-_Last updated: 28 Feb 2023_
+## Controles de la simulación
 
-## What's in this project?
+La simulación incluye un panel de control con diferentes opciones explicadas a continuación.
 
-← `README.md`: That's this file, where you can tell people what your cool website does and how you built it.
+![Controles de la simulación](assets/readme/controles.png)
 
-← `index.html`: This is the main web page for your site. The HTML defines the structure and content of the page using _elements_. You'll see references in the HTML to the JS and CSS files. Try clicking the image in the center of the page!
+### Controles de cámara
 
-← `style.css`: CSS files add styling rules to your content. The CSS applies styles to the elements in your HTML page. The style rules also make the image move when you click it.
+Se han implementado dos tipos de camara para la simulación: una `cámara orbital` y una `cámara de nave`. Para cambiar el tipo de camara se hace uso del selector denominado _Vista seleccionada_. En este selector se puede seleccionar los dos modos de camara mencionados además de un tercer modo en el que se muestran las dos cámaras a la vez, quedando la orbital a la izquierda y la de la nave a la derecha.
 
-← `script.js`: If you're feeling fancy you can add interactivity to your site with JavaScript. The code in the JavaScript file runs when the page loads, and when the visitor clicks the button you can add using the code in the TODO.
+#### Cámara orbital
+![Simulación en modo de cámara orbital](assets/readme/orbital.png)
 
-Open each file and check out the comments (in gray) for more info.
+En este modo la cámara _orbita_ alrededor de alguno de los objetos presentes en la simulación. Se puedo mover la camara arrastrando el ratón por la pantalla. Además se puede hacer _zoom_ utilizando la rueda del ratón hacía delante para aumentarñp y hacía atrás para disminuirlo.
 
-## Try this next 🏗️
+Se puede seleccionar el objeto sobre el que orbita la cámara pulsando con el botón derecho del ratón sobre el objeto deseado o seleccionándolo en el selector denominado _Objeto seleccionado_.
 
-Take a look in `TODO.md` for next steps you can try out in your new site!
+También se puede activar la rotación automática marcando la casilla _Rotación automática_.
+![Controles de camara órbital](assets/readme/controles_orbital.png)
 
-___Want a minimal version of this project to build your own website? Check out [Blank Website](https://glitch.com/edit/#!/remix/glitch-blank-website)!___
+#### Cámara de nave
 
-## Ready to share your site?
+![Simulación en modo de cámara de nave](assets/readme/nave.png)
+En este modo la cámara se mueve libremente sobre la escena. Para mover la camara se utilizan las teclas _WASD_ y, para rotar se puede arrastrar con el ratón o utilizar las _teclas direccionales_.
 
-Add these meta tags for SEO and social sharing between your page `<head></head>` tags, changing the values for your site:
+#### Cámara múltiple
+![Simulación en modo de cámara múltiple](assets/readme/multiple.png)
 
-```
-<link rel="canonical" href="https://glitch-hello-website.glitch.me/" />
-<meta name="description" content="A simple website, built with Glitch. Remix it to get your own."/>
-<meta name="robots" content="index,follow" />
-<meta property="og:title" content="Hello World!" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://glitch-hello-website.glitch.me/" />
-<meta property="og:description" content="A simple website, built with Glitch. Remix it to get your own."/>
-<meta property="og:image" content="https://cdn.glitch.com/605e2a51-d45f-4d87-a285-9410ad350515%2Fhello-website-social.png?v=1616712748147"/>
-<meta name="twitter:card" content="summary" />
-```
+Como se ha comentado previamente, la simulación incluye un modo en el que se puede observar la escena desde ambas cámaras.
 
-![Glitch](https://cdn.glitch.com/a9975ea6-8949-4bab-addb-8a95021dc2da%2FLogo_Color.svg?v=1602781328576)
+En la parte superior de la pantalla se incluyen las instrucciones para manejar las camaras seleccionadas.
 
-## You built this with Glitch!
+### Controles de velocidad de rotación y traslación
+![Controles de velocidad de la simulación](assets/readme/velocidades.png)
 
-[Glitch](https://glitch.com) is a friendly community where millions of people come together to build web apps and websites.
+La interfaz de usuario incluye unos selectores que permiten modificar la velocidad de _traslación_ y _rotación_ de todos los objetos presentes. 
 
-- Need more help? [Check out our Help Center](https://help.glitch.com/) for answers to any common questions.
-- Ready to make it official? [Become a paid Glitch member](https://glitch.com/pricing) to boost your app with private sharing, more storage and memory, domains and more.
+### Otras funcionalidades
+#### Rotación de los anillos de los planetas
+![Controles de rotación de los anillos de un planeta](assets/readme/rotacion_anillos.png)
+
+Al seleccionar un planeta con anillos (`Saturno` o `Urano`) aparecerá en la sección _Planetas_ de la interfaz de usuario unos selectores que permitirán modificar la rotación del anillo de dicho planeta en X, Y, y Z.
+
+## Referencias
+Todas las texturas, mapas de rugosidad, mapas de transparencia y el mapa de reflexión especular de la Tierra han sido sacados de [aquí](http://planetpixelemporium.com/planets.html).
