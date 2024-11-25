@@ -3,6 +3,10 @@
 
 Simulación del sistema solar realizada con _three.js_ en la que se encuentran simulados el sol y todos los planetas del Sistema Solar (incluido Plutón).
 
+## Acceso a la versión web
+
+La versión web de este proyecto se encuentra en [este proyecto de glitch.com](https://planetas-agustin.glitch.me)
+
 ## Controles de la simulación
 
 La simulación incluye un panel de control con diferentes opciones explicadas a continuación.
