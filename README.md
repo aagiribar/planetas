@@ -35,12 +35,12 @@ npm run start
 6. Una vez ejecutado este comando se observará en la consola algo parecido a esto:
 ```
 > planetas-agustin@1.0.0 start
-> node server.js
+> parcel ./src/index.html
 
-Your app is listening on port 3000
+Server running at http://localhost:1234
 ```
 
-7. Abrir un navegador y, en la barra de direcciones, escribir ```localhost:3000``` sustituyendo el 3000 por el número indicado anteriormente.
+7. Abrir un navegador y, en la barra de direcciones, escribir ```localhost:1234```
 
 8. Para terminar la simulación, pulsar la combinación de botones ```Ctrl + C``` en la consola donde se realizó el paso 5
 
