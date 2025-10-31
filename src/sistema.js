@@ -8,6 +8,7 @@ let estrella;
 let objetos = [];
 let anillos = [];
 let luz;
+let luzAmbiental;
 let foco_camara;
 let raycaster;
 let orbitCamControls, flyCamControls;
@@ -210,6 +211,18 @@ function init() {
     new URL("/assets/plutobump2k.jpg", import.meta.url)
   );
 
+  // Carga de la textura del fondo de estrellas
+  const cubeTexture = new THREE.CubeTextureLoader().load([
+    new URL("/assets/skybox/px.png", import.meta.url),
+    new URL("/assets/skybox/nx.png", import.meta.url),
+    new URL("/assets/skybox/py.png", import.meta.url),
+    new URL("/assets/skybox/ny.png", import.meta.url),
+    new URL("/assets/skybox/pz.png", import.meta.url),
+    new URL("/assets/skybox/nz.png", import.meta.url),
+  ]);
+
+  escena.background = cubeTexture;
+
   // Creación de los planetas y anillos
   Planeta(15, 0, 0, 0.24, 0xffffff, 1.61, 0.01, 1, 1, "Mercurio", tx_merc, bump_merc);
   Planeta(25, 0, 0, 0.60, 0xffffff, 1.17, 0.01, 1, 1, "Venus", tx_venus, bump_venus);
@@ -228,6 +241,10 @@ function init() {
   luz = new THREE.PointLight();
   luz.position.set(0,0,0);
   escena.add(luz);
+
+  // Creación de una luz ambiental para iluminar las zonas en sombra de los planetas
+  luzAmbiental = new THREE.AmbientLight(0x222222);
+  escena.add(luzAmbiental);
   
   // Creación del Raycaster para implementar enfocar la cámara hacieno click derecho sobre un planeta
   raycaster = new THREE.Raycaster();
