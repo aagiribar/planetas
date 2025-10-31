@@ -3,6 +3,19 @@
 
 Simulación del sistema solar realizada con _three.js_ en la que se encuentran simulados el sol y todos los planetas del Sistema Solar (incluido Plutón).
 
+A continuación se realiza una descripción del trabajo realizado:
+
+- Se han representado todos los planetas del sistema solar, utilizando las texturas obtenidas de los enlaces en las referencias.
+- Se han representado las órbitas de los distintos planetas.
+- Se ha implementado una cámara órbital alrededor de los planetas y una cámara de nave.
+- Se ha implementado el puerto de vista de forma que se pueden visualizar las dos cámaras al mismo tiempo.
+- Se ha implementado un selector para poder poner el foco de la cámara orbital en un planeta, así como pulsar el propio planeta con el botón derecho del ratón mediante un raycaster.
+- Se ha añadido luz puntual para representar la luz del sol y luz ambiente para representar la luz del espacio exterior y ver mejor los planetas.
+- Se ha añadido un selector para activar y desactivar la rotación automática de la cámara orbital.
+- Se ha implementado la posibilidad de rotar los anillos de Saturno y Urano.
+- Se ha implementado la posibilidad de modificar la velocidad de traslación y rotación de los planetas.
+- Se ha añadido un skybox para dar más realismo a la simulación.
+
 ## Acceso a la versión web
 
 La versión web de este proyecto se encuentra en [este sandbox de codesandbox](https://26tf22.csb.app/).
@@ -64,7 +77,7 @@ Se han implementado dos tipos de camara para la simulación: una `cámara orbita
 #### Cámara orbital
 ![Simulación en modo de cámara orbital](assets/readme/orbital.png)
 
-En este modo la cámara _orbita_ alrededor de alguno de los objetos presentes en la simulación. Se puedo mover la camara arrastrando el ratón por la pantalla. Además se puede hacer _zoom_ utilizando la rueda del ratón hacía delante para aumentarñp y hacía atrás para disminuirlo.
+En este modo la cámara _orbita_ alrededor de alguno de los objetos presentes en la simulación. Se puede mover la camara arrastrando el ratón por la pantalla. Además se puede hacer _zoom_ utilizando la rueda del ratón hacía delante para aumentarlo y hacía atrás para disminuirlo.
 
 Se puede seleccionar el objeto sobre el que orbita la cámara pulsando con el botón derecho del ratón sobre el objeto deseado o seleccionándolo en el selector denominado _Objeto seleccionado_.
 
@@ -74,6 +87,7 @@ También se puede activar la rotación automática marcando la casilla _Rotació
 #### Cámara de nave
 
 ![Simulación en modo de cámara de nave](assets/readme/nave.png)
+
 En este modo la cámara se mueve libremente sobre la escena. Para mover la camara se utilizan las teclas _WASD_ y, para rotar se puede arrastrar con el ratón o utilizar las _teclas direccionales_.
 
 #### Cámara múltiple
@@ -95,4 +109,9 @@ La interfaz de usuario incluye unos selectores que permiten modificar la velocid
 Al seleccionar un planeta con anillos (`Saturno` o `Urano`) aparecerá en la sección _Planetas_ de la interfaz de usuario unos selectores que permitirán modificar la rotación del anillo de dicho planeta en X, Y, y Z.
 
 ## Referencias
-Todas las texturas, mapas de rugosidad, mapas de transparencia y el mapa de reflexión especular de la Tierra han sido sacados de [aquí](http://planetpixelemporium.com/planets.html).
+Todas las texturas, mapas de rugosidad, mapas de transparencia, mapa de reflexión especular de la Tierra y skybox han sido sacados de:
+
+- [PlanetPixelEmporium](http://planetpixelemporium.com/planets.html).
+- [SolarSystemScope](https://www.solarsystemscope.com/textures/).
+
+Para convertir la textura del skybox en CubeMap se ha utilizado la siguiente [herramienta](https://github.com/matheowis/HDRI-to-CubeMap).
