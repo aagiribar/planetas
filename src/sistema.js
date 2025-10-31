@@ -106,7 +106,7 @@ function init() {
 
   // Carga de la textura del sol
   const tx_sol = new THREE.TextureLoader().load(
-    new URL("/assets/sunmap.jpg", import.meta.url)
+    new URL("/assets/8k_sun.jpg", import.meta.url)
   );
   // Creación de el objeto que representa al sol
   Estrella(10, tx_sol);
@@ -115,7 +115,7 @@ function init() {
   
   // Carga de las texturas, mapas de rugosidad y mapas de transparencia de los planetas y sus anillos
   const tx_merc = new THREE.TextureLoader().load(
-    new URL("/assets/mercurymap.jpg", import.meta.url)
+    new URL("/assets/8k_mercury.jpg", import.meta.url)
   );
   
   const bump_merc = new THREE.TextureLoader().load(
@@ -123,7 +123,11 @@ function init() {
   );
   
   const tx_venus = new THREE.TextureLoader().load(
-    new URL("/assets/venusmap.jpg", import.meta.url)
+    new URL("/assets/8k_venus_surface.jpg", import.meta.url)
+  );
+
+  const tx_venus_atmos = new THREE.TextureLoader().load(
+    new URL("/assets/4k_venus_atmosphere.jpg", import.meta.url)
   );
   
   const bump_venus = new THREE.TextureLoader().load(
@@ -131,27 +135,35 @@ function init() {
   );
   
   const tx_tierra = new THREE.TextureLoader().load(
-    new URL("/assets/earthmap1k.jpg", import.meta.url)
+    new URL("/assets/earth/8k_earth_daymap.jpg", import.meta.url)
+  );
+
+  const tx_tierra_noche = new THREE.TextureLoader().load(
+    new URL("/assets/earth/8k_earth_nightmap.jpg", import.meta.url)
   );
   
   const bump_tierra = new THREE.TextureLoader().load(
-    new URL("/assets/earthbump1k.jpg", import.meta.url)
+    new URL("/assets/earth/8k_earth_normal_map.tif", import.meta.url)
   );
   
   const spec_tierra = new THREE.TextureLoader().load(
-    new URL("/assets/earthspec1k.jpg", import.meta.url)
+    new URL("/assets/earth/8k_earth_specular_map.tif", import.meta.url)
   );
   
   const nubes_tierra = new THREE.TextureLoader().load(
-    new URL("/assets/earthcloudmap.jpg", import.meta.url)
+    new URL("/assets/earth/8k_earth_clouds.jpg", import.meta.url)
   );
   
   const trans_nubes = new THREE.TextureLoader().load(
-    new URL("/assets/earthcloudmaptrans_invert.jpg", import.meta.url)
+    new URL("/assets/earth/8k_earth_clouds.jpg", import.meta.url)
+  );
+
+  const tx_luna = new THREE.TextureLoader().load(
+    new URL("/assets/8k_moon.jpg", import.meta.url)
   );
   
   const tx_marte = new THREE.TextureLoader().load(
-    new URL("/assets/mars_1k_color.jpg", import.meta.url)
+    new URL("/assets/8k_mars.jpg", import.meta.url)
   );
   
   const bump_marte = new THREE.TextureLoader().load(
@@ -159,45 +171,45 @@ function init() {
   );
   
   const tx_jupiter = new THREE.TextureLoader().load(
-    new URL("/assets/jupitermap.jpg", import.meta.url)
+    new URL("/assets/8k_jupiter.jpg", import.meta.url)
   );
 
   const tx_saturno = new THREE.TextureLoader().load(
-    new URL("/assets/saturnmap.jpg", import.meta.url)
-  )
+    new URL("/assets/8k_saturn.jpg", import.meta.url)
+  );
 
   const tx_anillo_sat = new THREE.TextureLoader().load(
-    new URL("/assets/saturnringcolor.jpg", import.meta.url)
-  )
+    new URL("/assets/8k_saturn_ring_alpha.png", import.meta.url)
+  );
 
   const trans_anillo_sat = new THREE.TextureLoader().load(
     new URL("/assets/saturnringpattern.gif", import.meta.url)
-  )
+  );
 
   const tx_urano = new THREE.TextureLoader().load(
-    new URL("/assets/uranusmap.jpg", import.meta.url)
-  )
+    new URL("/assets/2k_uranus.jpg", import.meta.url)
+  );
 
   const tx_anillo_ur = new THREE.TextureLoader().load(
     new URL("/assets/uranusringcolour.jpg", import.meta.url)
-  )
+  );
 
   const trans_anillo_ur = new THREE.TextureLoader().load(
     new URL("/assets/uranusringtrans.gif", import.meta.url)
-  )
+  );
 
   const tx_neptuno = new THREE.TextureLoader().load(
-    new URL("/assets/neptunemap.jpg", import.meta.url)
-  )
+    new URL("/assets/2k_neptune.jpg", import.meta.url)
+  );
 
   const tx_pluton = new THREE.TextureLoader().load(
     new URL("/assets/plutomap2k.jpg", import.meta.url)
-  )
+  );
 
   const bump_pluton = new THREE.TextureLoader().load(
     new URL("/assets/plutobump2k.jpg", import.meta.url)
-  )
-  
+  );
+
   // Creación de los planetas y anillos
   Planeta(15, 0, 0, 0.24, 0xffffff, 1.61, 0.01, 1, 1, "Mercurio", tx_merc, bump_merc);
   Planeta(25, 0, 0, 0.60, 0xffffff, 1.17, 0.01, 1, 1, "Venus", tx_venus, bump_venus);
