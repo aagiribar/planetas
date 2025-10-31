@@ -90,6 +90,10 @@ function init() {
 
   // Creación del control de tipo orbital
   orbitCamControls = new OrbitControls(camaraOrbital, renderer.domElement);
+  orbitCamControls.enableDamping = true;
+  orbitCamControls.enableZoom = true;
+  orbitCamControls.enableRotate = true;
+  orbitCamControls.enablePan = false;
   
   // Creación del control de tipo vuelo
   flyCamControls = new FlyControls(camaraNave, renderer.domElement);
@@ -533,14 +537,12 @@ function onDocumentMouseDown(event) {
 function animationLoop() {
   timestamp = (Date.now() - t0) * accglobal;
   const delta = reloj.getDelta();
-  requestAnimationFrame(animationLoop);
   // Rotación del sol
   estrella.rotation.y += (0.01) * velocidadRotacion;
   // Se recoloca el foco de la camara orbital
-  orbitCamControls.target.x = foco_camara.position.x;
-  orbitCamControls.target.y = foco_camara.position.y;
-  orbitCamControls.target.z = foco_camara.position.z;
+  orbitCamControls.target.copy(foco_camara.position);
   orbitCamControls.update();
+  
   // Se muestran los controles de rotación de anillo si esta seleccionado un planeta con anillos (Saturno o Urano)
   if (foco_camara.userData.anillo != undefined) {
     carpetaRotacion.show();
@@ -637,4 +639,5 @@ function animationLoop() {
       renderer.render(escena, camaraNave);
     }
   }
+  requestAnimationFrame(animationLoop);
 }
