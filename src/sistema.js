@@ -82,8 +82,11 @@ function init() {
 
   // Redimensión de la ventana
   window.addEventListener("resize", function(event) {
-    camara.aspect = window.innerWidth / window.innerHeight;
-    camara.updateProjectionMatrix();
+    camaraOrbital.aspect = window.innerWidth / window.innerHeight;
+    camaraOrbital.updateProjectionMatrix();
+
+    camaraNave.aspect = window.innerWidth / window.innerHeight;
+    camaraNave.updateProjectionMatrix();
 
     renderer.setSize(window.innerWidth, window.innerHeight);
   });  
