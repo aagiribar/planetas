@@ -16,11 +16,13 @@ A continuación se realiza una descripción del trabajo realizado:
 - Se ha implementado la posibilidad de modificar la velocidad de traslación y rotación de los planetas.
 - Se ha añadido un skybox para dar más realismo a la simulación.
 
-## Acceso a la versión web
+## Acceso a la versión web y a vídeo demostrativo
 
 La versión web de este proyecto se encuentra en [este sandbox de codesandbox](https://26tf22.csb.app/).
 
 El código se puede acceder desde [este enlace](https://codesandbox.io/p/sandbox/planetas-26tf22).
+
+Un vídeo demostrativo de la simulación puede ser encontrado en [este enlace](https://youtu.be/pOSvFZ6s_CU).
 
 ## Ejecución del proyecto en local
 
