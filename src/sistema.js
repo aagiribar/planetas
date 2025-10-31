@@ -64,7 +64,7 @@ function init() {
     0.1,
     1000
   );
-  camaraOrbital.position.set(0, 0, 70);
+  camaraOrbital.position.set(0, 20, 70);
 
   // Creación de la camara controlada por el control de vuelo (vista de nave)
   camaraNave = new THREE.PerspectiveCamera(
@@ -73,7 +73,7 @@ function init() {
     0.1,
     1000
   );
-  camaraNave.position.set(0, 0, 70);
+  camaraNave.position.set(0, 20, 70);
 
   // Creación del renderer
   renderer = new THREE.WebGLRenderer();
