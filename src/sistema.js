@@ -17,6 +17,31 @@ import {
   selectorCamara
 } from "./modules/gui";
 
+import { 
+  cubeTexture,
+  tx_merc,
+  bump_merc,
+  tx_venus,
+  bump_venus,
+  tx_tierra,
+  bump_tierra,
+  spec_tierra,
+  nubes_tierra,
+  trans_nubes,
+  tx_marte,
+  bump_marte,
+  tx_jupiter,
+  tx_saturno,
+  tx_anillo_sat,
+  trans_anillo_sat,
+  tx_urano,
+  tx_anillo_ur,
+  trans_anillo_ur,
+  tx_neptuno,
+  tx_pluton,
+  bump_pluton,
+} from "./modules/textures"
+
 let escena, renderer, camaraOrbital, camaraNave;
 let estrella;
 export let objetos = [];
@@ -103,113 +128,6 @@ function init() {
   Estrella(10, tx_sol);
   // Al empezar la simulación la camara orbita alrededor del sol
   setFocoCamara(estrella)
-
-  // Carga de las texturas, mapas de rugosidad y mapas de transparencia de los planetas y sus anillos
-  const tx_merc = new THREE.TextureLoader().load(
-    "/assets/8k_mercury.jpg"
-  );
-
-  const bump_merc = new THREE.TextureLoader().load(
-    "/assets/mercurybump.jpg"
-  );
-
-  const tx_venus = new THREE.TextureLoader().load(
-    "/assets/8k_venus_surface.jpg"
-  );
-
-  const tx_venus_atmos = new THREE.TextureLoader().load(
-    "/assets/4k_venus_atmosphere.jpg"
-  );
-
-  const bump_venus = new THREE.TextureLoader().load(
-    "/assets/venusbump.jpg"
-  );
-
-  const tx_tierra = new THREE.TextureLoader().load(
-    "/assets/earth/8k_earth_daymap.jpg"
-  );
-
-  const tx_tierra_noche = new THREE.TextureLoader().load(
-    "/assets/earth/8k_earth_nightmap.jpg"
-  );
-
-  const bump_tierra = new THREE.TextureLoader().load(
-    "/assets/earth/8k_earth_normal_map.tif"
-  );
-
-  const spec_tierra = new THREE.TextureLoader().load(
-    "/assets/earth/8k_earth_specular_map.tif"
-  );
-
-  const nubes_tierra = new THREE.TextureLoader().load(
-    "/assets/earth/8k_earth_clouds.jpg"
-  );
-
-  const trans_nubes = new THREE.TextureLoader().load(
-    "/assets/earth/8k_earth_clouds.jpg"
-  );
-
-  const tx_luna = new THREE.TextureLoader().load(
-    "/assets/8k_moon.jpg"
-  );
-
-  const tx_marte = new THREE.TextureLoader().load(
-    "/assets/8k_mars.jpg"
-  );
-
-  const bump_marte = new THREE.TextureLoader().load(
-    "/assets/marsbump1k.jpg"
-  );
-
-  const tx_jupiter = new THREE.TextureLoader().load(
-    "/assets/8k_jupiter.jpg"
-  );
-
-  const tx_saturno = new THREE.TextureLoader().load(
-    "/assets/8k_saturn.jpg"
-  );
-
-  const tx_anillo_sat = new THREE.TextureLoader().load(
-    "/assets/8k_saturn_ring_alpha.png"
-  );
-
-  const trans_anillo_sat = new THREE.TextureLoader().load(
-    "/assets/saturnringpattern.gif"
-  );
-
-  const tx_urano = new THREE.TextureLoader().load(
-    "/assets/2k_uranus.jpg"
-  );
-
-  const tx_anillo_ur = new THREE.TextureLoader().load(
-    "/assets/uranusringcolour.jpg"
-  );
-
-  const trans_anillo_ur = new THREE.TextureLoader().load(
-    "/assets/uranusringtrans.gif"
-  );
-
-  const tx_neptuno = new THREE.TextureLoader().load(
-    "/assets/2k_neptune.jpg"
-  );
-
-  const tx_pluton = new THREE.TextureLoader().load(
-    "/assets/plutomap2k.jpg"
-  );
-
-  const bump_pluton = new THREE.TextureLoader().load(
-    "/assets/plutobump2k.jpg"
-  );
-
-  // Carga de la textura del fondo de estrellas
-  const cubeTexture = new THREE.CubeTextureLoader().load([
-    "/assets/skybox/px.png",
-    "/assets/skybox/nx.png",
-    "/assets/skybox/py.png",
-    "/assets/skybox/ny.png",
-    "/assets/skybox/pz.png",
-    "/assets/skybox/nz.png",
-  ]);
 
   escena.background = cubeTexture;
 
