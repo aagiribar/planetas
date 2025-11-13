@@ -13,10 +13,14 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^7.2.0"
   },
-  "engines": {
-    "node": "20.x"
+  "devDependencies": {
+    "parcel-reporter-static-files-copy": "^1.5.3"
   },
   "keywords": [
     "three.js"
-  ]
+  ],
+  "staticFiles": {
+    "staticPath": "assets",
+    "staticOutPath": "assets"
+  }
 }

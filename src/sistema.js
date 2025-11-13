@@ -54,7 +54,7 @@ function init() {
   infoCamaraOrbital.innerHTML = "Controles de camara órbital<br>Movimiento: Arrastre con el ratón.<br>Zoom: Rueda del ratón<br>Enfocar un planeta o estrella: Click derecho"
   infoCamaraNave.innerHTML = "Controles de camara de nave<br>Movimiento de la nave: WASD<br>Movimiento de la camara: Arrastre con el ratón o flechas direccionales"
   info.appendChild(infoCamaraOrbital);
-  
+
   // Creación de la escena
   escena = new THREE.Scene();
   // Creación de la camara controlada con el control orbital (vista general)
@@ -78,10 +78,11 @@ function init() {
   // Creación del renderer
   renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.shadowMap.enabled = true;
   document.body.appendChild(renderer.domElement);
 
   // Redimensión de la ventana
-  window.addEventListener("resize", function(event) {
+  window.addEventListener("resize", function (event) {
     camaraOrbital.aspect = window.innerWidth / window.innerHeight;
     camaraOrbital.updateProjectionMatrix();
 
@@ -89,7 +90,7 @@ function init() {
     camaraNave.updateProjectionMatrix();
 
     renderer.setSize(window.innerWidth, window.innerHeight);
-  });  
+  });
 
   // Creación del control de tipo orbital
   orbitCamControls = new OrbitControls(camaraOrbital, renderer.domElement);
@@ -97,7 +98,7 @@ function init() {
   orbitCamControls.enableZoom = true;
   orbitCamControls.enableRotate = true;
   orbitCamControls.enablePan = false;
-  
+
   // Creación del control de tipo vuelo
   flyCamControls = new FlyControls(camaraNave, renderer.domElement);
   flyCamControls.dragToLook = true;
@@ -114,118 +115,118 @@ function init() {
 
   // Carga de la textura del sol
   const tx_sol = new THREE.TextureLoader().load(
-    new URL("/assets/8k_sun.jpg", import.meta.url)
+    "/assets/8k_sun.jpg"
   );
   // Creación de el objeto que representa al sol
   Estrella(10, tx_sol);
   // Al empezar la simulación la camara orbita alrededor del sol
   foco_camara = estrella;
-  
+
   // Carga de las texturas, mapas de rugosidad y mapas de transparencia de los planetas y sus anillos
   const tx_merc = new THREE.TextureLoader().load(
-    new URL("/assets/8k_mercury.jpg", import.meta.url)
+    "/assets/8k_mercury.jpg"
   );
-  
+
   const bump_merc = new THREE.TextureLoader().load(
-    new URL("/assets/mercurybump.jpg", import.meta.url)
+    "/assets/mercurybump.jpg"
   );
-  
+
   const tx_venus = new THREE.TextureLoader().load(
-    new URL("/assets/8k_venus_surface.jpg", import.meta.url)
+    "/assets/8k_venus_surface.jpg"
   );
 
   const tx_venus_atmos = new THREE.TextureLoader().load(
-    new URL("/assets/4k_venus_atmosphere.jpg", import.meta.url)
+    "/assets/4k_venus_atmosphere.jpg"
   );
-  
+
   const bump_venus = new THREE.TextureLoader().load(
-    new URL("/assets/venusbump.jpg", import.meta.url)
+    "/assets/venusbump.jpg"
   );
-  
+
   const tx_tierra = new THREE.TextureLoader().load(
-    new URL("/assets/earth/8k_earth_daymap.jpg", import.meta.url)
+    "/assets/earth/8k_earth_daymap.jpg"
   );
 
   const tx_tierra_noche = new THREE.TextureLoader().load(
-    new URL("/assets/earth/8k_earth_nightmap.jpg", import.meta.url)
+    "/assets/earth/8k_earth_nightmap.jpg"
   );
-  
+
   const bump_tierra = new THREE.TextureLoader().load(
-    new URL("/assets/earth/8k_earth_normal_map.tif", import.meta.url)
+    "/assets/earth/8k_earth_normal_map.tif"
   );
-  
+
   const spec_tierra = new THREE.TextureLoader().load(
-    new URL("/assets/earth/8k_earth_specular_map.tif", import.meta.url)
+    "/assets/earth/8k_earth_specular_map.tif"
   );
-  
+
   const nubes_tierra = new THREE.TextureLoader().load(
-    new URL("/assets/earth/8k_earth_clouds.jpg", import.meta.url)
+    "/assets/earth/8k_earth_clouds.jpg"
   );
-  
+
   const trans_nubes = new THREE.TextureLoader().load(
-    new URL("/assets/earth/8k_earth_clouds.jpg", import.meta.url)
+    "/assets/earth/8k_earth_clouds.jpg"
   );
 
   const tx_luna = new THREE.TextureLoader().load(
-    new URL("/assets/8k_moon.jpg", import.meta.url)
+    "/assets/8k_moon.jpg"
   );
-  
+
   const tx_marte = new THREE.TextureLoader().load(
-    new URL("/assets/8k_mars.jpg", import.meta.url)
+    "/assets/8k_mars.jpg"
   );
-  
+
   const bump_marte = new THREE.TextureLoader().load(
-    new URL("/assets/marsbump1k.jpg", import.meta.url)
+    "/assets/marsbump1k.jpg"
   );
-  
+
   const tx_jupiter = new THREE.TextureLoader().load(
-    new URL("/assets/8k_jupiter.jpg", import.meta.url)
+    "/assets/8k_jupiter.jpg"
   );
 
   const tx_saturno = new THREE.TextureLoader().load(
-    new URL("/assets/8k_saturn.jpg", import.meta.url)
+    "/assets/8k_saturn.jpg"
   );
 
   const tx_anillo_sat = new THREE.TextureLoader().load(
-    new URL("/assets/8k_saturn_ring_alpha.png", import.meta.url)
+    "/assets/8k_saturn_ring_alpha.png"
   );
 
   const trans_anillo_sat = new THREE.TextureLoader().load(
-    new URL("/assets/saturnringpattern.gif", import.meta.url)
+    "/assets/saturnringpattern.gif"
   );
 
   const tx_urano = new THREE.TextureLoader().load(
-    new URL("/assets/2k_uranus.jpg", import.meta.url)
+    "/assets/2k_uranus.jpg"
   );
 
   const tx_anillo_ur = new THREE.TextureLoader().load(
-    new URL("/assets/uranusringcolour.jpg", import.meta.url)
+    "/assets/uranusringcolour.jpg"
   );
 
   const trans_anillo_ur = new THREE.TextureLoader().load(
-    new URL("/assets/uranusringtrans.gif", import.meta.url)
+    "/assets/uranusringtrans.gif"
   );
 
   const tx_neptuno = new THREE.TextureLoader().load(
-    new URL("/assets/2k_neptune.jpg", import.meta.url)
+    "/assets/2k_neptune.jpg"
   );
 
   const tx_pluton = new THREE.TextureLoader().load(
-    new URL("/assets/plutomap2k.jpg", import.meta.url)
+    "/assets/plutomap2k.jpg"
   );
 
   const bump_pluton = new THREE.TextureLoader().load(
-    new URL("/assets/plutobump2k.jpg", import.meta.url)
+    "/assets/plutobump2k.jpg"
   );
 
   // Carga de la textura del fondo de estrellas
   const cubeTexture = new THREE.CubeTextureLoader().load([
-    new URL("/assets/skybox/px.png", import.meta.url),
-    new URL("/assets/skybox/nx.png", import.meta.url),
-    new URL("/assets/skybox/py.png", import.meta.url),
-    new URL("/assets/skybox/ny.png", import.meta.url),
-    new URL("/assets/skybox/pz.png", import.meta.url),
-    new URL("/assets/skybox/nz.png", import.meta.url),
+    "/assets/skybox/px.png",
+    "/assets/skybox/nx.png",
+    "/assets/skybox/py.png",
+    "/assets/skybox/ny.png",
+    "/assets/skybox/pz.png",
+    "/assets/skybox/nz.png",
   ]);
 
   escena.background = cubeTexture;
@@ -245,18 +246,19 @@ function init() {
   Planeta(160, 0, 0, 0.11, 0xffffff, 0.15, 0.01, 1, 1, "Plutón", tx_pluton, bump_pluton);
 
   // Creación de una luz puntual que representará la luz del sol
-  luz = new THREE.PointLight();
-  luz.position.set(0,0,0);
+  luz = new THREE.PointLight(0xFFFFFF, 1);
+  luz.position.set(0, 30, 0);
+  luz.castShadow = true;
   escena.add(luz);
 
   // Creación de una luz ambiental para iluminar las zonas en sombra de los planetas
   luzAmbiental = new THREE.AmbientLight(0x222222);
   escena.add(luzAmbiental);
-  
+
   // Creación del Raycaster para implementar enfocar la cámara hacieno click derecho sobre un planeta
   raycaster = new THREE.Raycaster();
   document.addEventListener("mousedown", onDocumentMouseDown);
-  
+
   // Objeto que almacena los elementos de la interfaz de usuario
   elementosUI = {
     "Objeto seleccionado": "Sol",
@@ -391,23 +393,23 @@ function Planeta(x, y, z, radio, color, velTras, velRot, f1, f2, nombre, textura
   });
 
   //Textura
-  if (textura != undefined){
+  if (textura != undefined) {
     material.map = textura;
   }
   //Rugosidad
-  if (texbump != undefined){
+  if (texbump != undefined) {
     material.bumpMap = texbump;
     material.bumpScale = 0.5;
   }
 
   //Especular
-  if (texspec != undefined){
+  if (texspec != undefined) {
     material.specularMap = texspec;
     material.specular = new THREE.Color('grey');
   }
 
   //Transparencia
-  if (texalpha != undefined){
+  if (texalpha != undefined) {
     //Con mapa de transparencia
     material.alphaMap = texalpha;
     material.transparent = true;
@@ -475,12 +477,12 @@ function Anillo(x, y, z, planeta, radioInterno, radioExterno, color, textura = u
   });
 
   // Textura del anillo
-  if (textura != undefined){
+  if (textura != undefined) {
     material.map = textura;
   }
 
   // Transparencia del anillos
-  if (texalpha != undefined){
+  if (texalpha != undefined) {
     //Con mapa de transparencia
     material.alphaMap = texalpha;
     material.transparent = true;
@@ -518,13 +520,13 @@ function obtenerNombresObjetos() {
 function onDocumentMouseDown(event) {
   if (event.buttons == 2) {
     const mouse = {
-    x: (event.clientX / renderer.domElement.clientWidth) * 2 - 1,
-    y: -(event.clientY / renderer.domElement.clientHeight) * 2 + 1,
+      x: (event.clientX / renderer.domElement.clientWidth) * 2 - 1,
+      y: -(event.clientY / renderer.domElement.clientHeight) * 2 + 1,
     };
 
     // Intersección, define rayo
     raycaster.setFromCamera(mouse, camaraOrbital);
-    
+
     // Se detectan las intersecciones con el rayo
     const intersecciones = raycaster.intersectObjects(objetos);
     if (intersecciones.length > 0) {
@@ -545,7 +547,7 @@ function animationLoop() {
   // Se recoloca el foco de la camara orbital
   orbitCamControls.target.copy(foco_camara.position);
   orbitCamControls.update();
-  
+
   // Se muestran los controles de rotación de anillo si esta seleccionado un planeta con anillos (Saturno o Urano)
   if (foco_camara.userData.anillo != undefined) {
     carpetaRotacion.show();
@@ -596,7 +598,7 @@ function animationLoop() {
 
     // Se establece el puerto de vista
     renderer.setViewport(x, y, w, h);
-    renderer.setScissor(x,y,w,h);
+    renderer.setScissor(x, y, w, h);
     renderer.setScissorTest(true);
     // Se actualiza la relación de aspecto de la camara
     camaraOrbital.aspect = w / h;
@@ -612,14 +614,14 @@ function animationLoop() {
 
     // Se establece el puerto de vista
     renderer.setViewport(x, y, w, h);
-    renderer.setScissor(x,y,w,h);
+    renderer.setScissor(x, y, w, h);
     // Se actualiza la relación de aspecto de la camara
     camaraNave.aspect = w / h;
     camaraNave.updateProjectionMatrix();
     // Se renderiza la escena con la camara de la nave
     renderer.render(escena, camaraNave);
   }
-  else  {
+  else {
     // Se calculan las dimensiones del puerto de vista para que este ocupe toda la pantalla
     x = Math.floor(window.innerWidth * 0.0);
     y = Math.floor(window.innerHeight * 0.0);
@@ -628,8 +630,8 @@ function animationLoop() {
 
     // Se establece el puerto de vista
     renderer.setViewport(x, y, w, h);
-    renderer.setScissor( x,y,w,h );
-    
+    renderer.setScissor(x, y, w, h);
+
     // Se renderiza con la camara seleccionada actualizando la relación de aspecto antes
     if (usarVistaOrbital) {
       camaraOrbital.aspect = w / h;
