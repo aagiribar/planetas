@@ -1,34 +1,35 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js';
 import { FlyControls } from 'three/examples/jsm/controls/FlyControls';
+import {
+  crearGUI,
+  carpetaRotacion,
+  focoCamara,
+  setFocoCamara,
+  usarVistaNave,
+  usarVistaOrbital,
+  crearInfo,
+  rotacionAnilloX,
+  rotacionAnilloY,
+  rotacionAnilloZ,
+  velocidadRotacion,
+  velocidadTraslacion,
+  selectorCamara
+} from "./modules/gui";
 
 let escena, renderer, camaraOrbital, camaraNave;
 let estrella;
-let objetos = [];
+export let objetos = [];
 let anillos = [];
 let luz;
 let luzAmbiental;
-let foco_camara;
 let raycaster;
-let orbitCamControls, flyCamControls;
-let usarVistaNave, usarVistaOrbital;
+export let orbitCamControls, flyCamControls;
 let nubes;
-let elementosUI;
-let selectorCamara;
-let selectorRotacion;
-let carpetaRotacion;
-let rotacionAnilloX, rotacionAnilloY, rotacionAnilloZ;
 let t0 = 0;
 let accglobal = 0.001;
 let timestamp;
-let velocidadTraslacion = 1;
-let velocidadRotacion = 1;
 let reloj;
-let info, infoCamaraOrbital, infoCamaraNave;
-
-// Creación de la interfaz de usuario
-const gui = new GUI();
 
 // Se inicializa la simulación
 init();
@@ -36,24 +37,7 @@ init();
 animationLoop();
 
 function init() {
-  // Información en pantalla sobre como controlar las camaras
-  info = document.createElement('div');
-  info.style.position = 'absolute';
-  info.style.top = '30px';
-  info.style.width = '100%';
-  info.style.textAlign = 'center';
-  info.style.color = '#fff';
-  info.style.fontWeight = 'bold';
-  info.style.backgroundColor = 'transparent';
-  info.style.zIndex = '1';
-  info.style.fontFamily = 'Monospace';
-  info.innerHTML = "La simulación puede ser controlada desde el panel de la derecha";
-  document.body.appendChild(info);
-  infoCamaraOrbital = document.createElement("div");
-  infoCamaraNave = document.createElement("div");
-  infoCamaraOrbital.innerHTML = "Controles de camara órbital<br>Movimiento: Arrastre con el ratón.<br>Zoom: Rueda del ratón<br>Enfocar un planeta o estrella: Click derecho"
-  infoCamaraNave.innerHTML = "Controles de camara de nave<br>Movimiento de la nave: WASD<br>Movimiento de la camara: Arrastre con el ratón o flechas direccionales"
-  info.appendChild(infoCamaraOrbital);
+  crearInfo();
 
   // Creación de la escena
   escena = new THREE.Scene();
@@ -110,8 +94,6 @@ function init() {
 
   // Modo inicial de vista (vista orbital)
   flyCamControls.enabled = false;
-  usarVistaNave = false;
-  usarVistaOrbital = true;
 
   // Carga de la textura del sol
   const tx_sol = new THREE.TextureLoader().load(
@@ -120,7 +102,7 @@ function init() {
   // Creación de el objeto que representa al sol
   Estrella(10, tx_sol);
   // Al empezar la simulación la camara orbita alrededor del sol
-  foco_camara = estrella;
+  setFocoCamara(estrella)
 
   // Carga de las texturas, mapas de rugosidad y mapas de transparencia de los planetas y sus anillos
   const tx_merc = new THREE.TextureLoader().load(
@@ -247,7 +229,7 @@ function init() {
 
   // Creación de una luz puntual que representará la luz del sol
   luz = new THREE.PointLight(0xFFFFFF, 1);
-  luz.position.set(0, 30, 0);
+  luz.position.set(0, 0, 0);
   luz.castShadow = true;
   escena.add(luz);
 
@@ -259,100 +241,7 @@ function init() {
   raycaster = new THREE.Raycaster();
   document.addEventListener("mousedown", onDocumentMouseDown);
 
-  // Objeto que almacena los elementos de la interfaz de usuario
-  elementosUI = {
-    "Objeto seleccionado": "Sol",
-    "Rotación automática": false,
-    "Rotación en X": Math.PI / 2,
-    "Rotación en Y": Math.PI / 4,
-    "Rotación en Z": 0,
-    "Velocidad de traslación": 1,
-    "Velocidad de rotación": 1,
-    "Vista seleccionada": "Vista orbital"
-  };
-  // Creación de carpeta para almacenar los controles de camara
-  const carpetaCamara = gui.addFolder("Cámara");
-
-  // Selector de objeto sobre el que orbitará la camara (camara orbital)
-  selectorCamara = carpetaCamara.add(elementosUI, "Objeto seleccionado", obtenerNombresObjetos());
-  selectorCamara.onChange(function (valor) {
-    foco_camara = objetos.find((objeto) => {
-      return objeto.userData.nombre === valor;
-    });
-  });
-
-  // Selector de rotación automática de la camara (camara orbital)
-  selectorRotacion = carpetaCamara.add(elementosUI, "Rotación automática");
-  selectorRotacion.onChange(function (valor) {
-    orbitCamControls.autoRotate = valor;
-  });
-
-  // Creación de carpeta para almacenar los controles sobre los planetas
-  let carpetaPlaneta = gui.addFolder("Planeta");
-
-  // Creación de carpeta para almacenar los controles de rotación de los anillos de los planetas (Saturno y Urano)
-  carpetaRotacion = carpetaPlaneta.addFolder("Rotación del anillo");
-  // Controles de rotación del anillo en los 3 angulos
-  rotacionAnilloX = carpetaRotacion.add(elementosUI, "Rotación en X", 0, Math.PI * 2, 0.01);
-  rotacionAnilloY = carpetaRotacion.add(elementosUI, "Rotación en Y", 0, Math.PI * 2, 0.01);
-  rotacionAnilloZ = carpetaRotacion.add(elementosUI, "Rotación en Z", 0, Math.PI * 2, 0.01);
-
-  rotacionAnilloX.onChange(function (valor) {
-    foco_camara.userData.anillo.rotation.x = valor;
-  });
-
-  rotacionAnilloY.onChange(function (valor) {
-    foco_camara.userData.anillo.rotation.y = valor;
-  });
-
-  rotacionAnilloZ.onChange(function (valor) {
-    foco_camara.userData.anillo.rotation.z = valor;
-  });
-
-  // Creación de carpeta para almacenar los controles sobre la simulación
-  let carpetaSimulacion = gui.addFolder("Simulación");
-  // Control de velocidad de traslación de los planetas
-  carpetaSimulacion.add(elementosUI, "Velocidad de traslación", 0, 2, 0.01).onChange(function (valor) {
-    velocidadTraslacion = valor;
-  });
-  // Control de velocidad de rotación de los planetas
-  carpetaSimulacion.add(elementosUI, "Velocidad de rotación", 0, 2, 0.01).onChange(function (valor) {
-    velocidadRotacion = valor;
-  });
-
-  // Selector de camaras
-  carpetaCamara.add(elementosUI, "Vista seleccionada", ["Vista orbital", "Vista desde nave", "Ambas"]).onChange(function (valor) {
-    if (valor == "Vista desde nave") {
-      usarVistaNave = true;
-      usarVistaOrbital = false;
-      selectorCamara.hide();
-      selectorRotacion.hide();
-      flyCamControls.enabled = false;
-      orbitCamControls.enabled = false;
-      info.removeChild(infoCamaraOrbital);
-      info.appendChild(infoCamaraNave);
-    }
-    else if (valor == "Vista orbital") {
-      usarVistaNave = false;
-      usarVistaOrbital = true;
-      selectorCamara.show();
-      selectorRotacion.show();
-      flyCamControls.enabled = false;
-      orbitCamControls.enabled = true;
-      info.removeChild(infoCamaraNave);
-      info.appendChild(infoCamaraOrbital);
-    }
-    else if (valor == "Ambas") {
-      usarVistaNave = true;
-      usarVistaOrbital = true;
-      selectorCamara.show();
-      selectorRotacion.show();
-      flyCamControls.enabled = true;
-      orbitCamControls.enabled = true;
-      info.appendChild(infoCamaraOrbital);
-      info.appendChild(infoCamaraNave);
-    }
-  });
+  crearGUI();
 }
 
 // Función para crear una estrella en el centro de la simulación
@@ -506,15 +395,6 @@ function Anillo(x, y, z, planeta, radioInterno, radioExterno, color, textura = u
   planeta.userData.anillo = anillo;
 }
 
-// Función para obtener un array con el nombre de los objetos creados
-function obtenerNombresObjetos() {
-  let nombres = []
-  for (const objeto of objetos) {
-    nombres.push(objeto.userData.nombre)
-  }
-  return nombres;
-}
-
 // Función para controlar el evento de ratón cuando se hace click
 // Se utiliza para cambiar el foco de la camara orbital al hacer click derecho en un planeta
 function onDocumentMouseDown(event) {
@@ -531,9 +411,9 @@ function onDocumentMouseDown(event) {
     const intersecciones = raycaster.intersectObjects(objetos);
     if (intersecciones.length > 0) {
       // Se cambia el foco de la camara
-      foco_camara = intersecciones[0].object;
+      setFocoCamara(intersecciones[0].object);
       // Se actualiza el selector en la interfaz de usuario
-      selectorCamara.setValue(foco_camara.userData.nombre);
+      selectorCamara.setValue(focoCamara.userData.nombre);
     }
   }
 }
@@ -545,16 +425,16 @@ function animationLoop() {
   // Rotación del sol
   estrella.rotation.y += (0.01) * velocidadRotacion;
   // Se recoloca el foco de la camara orbital
-  orbitCamControls.target.copy(foco_camara.position);
+  orbitCamControls.target.copy(focoCamara.position);
   orbitCamControls.update();
 
   // Se muestran los controles de rotación de anillo si esta seleccionado un planeta con anillos (Saturno o Urano)
-  if (foco_camara.userData.anillo != undefined) {
+  if (focoCamara.userData.anillo != undefined) {
     carpetaRotacion.show();
     // Se actualiza el valor mostrado en la interfaz de usuario
-    rotacionAnilloX.setValue(foco_camara.userData.anillo.rotation.x);
-    rotacionAnilloY.setValue(foco_camara.userData.anillo.rotation.y);
-    rotacionAnilloZ.setValue(foco_camara.userData.anillo.rotation.z);
+    rotacionAnilloX.setValue(focoCamara.userData.anillo.rotation.x);
+    rotacionAnilloY.setValue(focoCamara.userData.anillo.rotation.y);
+    rotacionAnilloZ.setValue(focoCamara.userData.anillo.rotation.z);
   }
   else {
     carpetaRotacion.hide();
