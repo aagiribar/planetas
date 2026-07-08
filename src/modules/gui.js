@@ -1,5 +1,6 @@
 import { GUI } from "lil-gui";
-import { objetos, orbitCamControls, flyCamControls } from "../sistema";
+import { orbitCamControls, flyCamControls } from "./simObjects";
+import { objetos } from "../sistema";
 
 // Creación de la interfaz de usuario
 export const gui = new GUI();
