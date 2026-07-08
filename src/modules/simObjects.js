@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { FlyControls } from 'three/examples/jsm/controls/FlyControls';
-import { objetos } from "../sistema";
+import { objetos } from "./visualObjects";
 import { setFocoCamara, selectorCamara, focoCamara } from "./gui";
 
 export let escena, renderer, camaraOrbital, camaraNave;
