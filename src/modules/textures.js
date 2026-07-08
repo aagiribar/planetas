@@ -1,5 +1,10 @@
 import * as THREE from "three";
 
+// Carga de la textura del sol
+export const tx_sol = new THREE.TextureLoader().load(
+    "/assets/8k_sun.jpg"
+);
+
 // Carga de las texturas, mapas de rugosidad y mapas de transparencia de los planetas y sus anillos
 export const tx_merc = new THREE.TextureLoader().load(
     "/assets/8k_mercury.jpg"

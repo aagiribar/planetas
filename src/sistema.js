@@ -17,6 +17,7 @@ import {
 
 import { 
   cubeTexture,
+  tx_sol,
   tx_merc,
   bump_merc,
   tx_venus,
@@ -69,10 +70,6 @@ function init() {
   crearInfo();
   createSimObjects();
 
-  // Carga de la textura del sol
-  const tx_sol = new THREE.TextureLoader().load(
-    "/assets/8k_sun.jpg"
-  );
   // Creación de el objeto que representa al sol
   Estrella(10, tx_sol);
   // Al empezar la simulación la camara orbita alrededor del sol
