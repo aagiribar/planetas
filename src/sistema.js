@@ -2,7 +2,6 @@ import {
   crearGUI,
   carpetaRotacion,
   focoCamara,
-  setFocoCamara,
   usarVistaNave,
   usarVistaOrbital,
   crearInfo,
@@ -11,7 +10,6 @@ import {
   rotacionAnilloZ,
   velocidadRotacion,
   velocidadTraslacion,
-  selectorCamara
 } from "./modules/gui";
 
 import { 
@@ -26,7 +24,13 @@ import {
   camaraOrbital,
   camaraNave
 } from "./modules/simObjects";
-import { createVisualObjects, estrella, objetos, nubes } from "./modules/visualObjects";
+
+import { 
+  createVisualObjects, 
+  estrella, 
+  objetos, 
+  nubes 
+} from "./modules/visualObjects";
 
 let timestamp;
 

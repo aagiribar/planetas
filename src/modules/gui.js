@@ -3,7 +3,7 @@ import { orbitCamControls, flyCamControls } from "./simObjects";
 import { objetos } from "./visualObjects";
 
 // Creación de la interfaz de usuario
-export const gui = new GUI();
+const gui = new GUI();
 
 let elementosUI;
 let selectorRotacion;
